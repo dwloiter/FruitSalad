@@ -1,0 +1,16 @@
+/* Main CSS */
+h1 {
+    font-size: 3em;
+    font-weight: bold;
+}
+
+
+/* Class CSS */
+
+.container {
+    text-align: center;
+}
+
+.body_text {
+    background-color: whitesmoke;
+}
