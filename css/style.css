@@ -4,6 +4,22 @@ h1 {
     font-weight: bold;
 }
 
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 80%;
+    height: auto;
+    
+}
+
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+}
 
 /* Class CSS */
 
@@ -14,3 +30,4 @@ h1 {
 .body_text {
     background-color: whitesmoke;
 }
+
