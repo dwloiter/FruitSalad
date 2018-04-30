@@ -16,9 +16,11 @@ canvas {
 }
 
 html, body {
-  width:  100%;
-  height: 100%;
-  margin: 0px;
+    width:  100%;
+    height: 100%;
+    margin: 0px;
+    background:url('../images/bg.jpg');
+    background-repeat: repeat;
 }
 
 /* Class CSS */
@@ -31,3 +33,4 @@ html, body {
     background-color: whitesmoke;
 }
 
+/* IDs */
