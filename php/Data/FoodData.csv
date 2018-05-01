@@ -1,0 +1,10 @@
+﻿Name,Price,Hunger,Meat,Grain,Vegetable
+Pork,20,30,40,0,0
+Beef,30,30,40,0,0
+Chicken,20,30,30,0,0
+Fish,30,20,30,0,0
+Apple,10,5,0,0,20
+Orange,14,5,0,0,20
+Cabage,23,10,0,0,20
+Wheat,18,20,0,30,0
+Rice,20,20,0,30,0
