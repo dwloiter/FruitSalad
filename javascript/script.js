@@ -8,6 +8,8 @@ var context = canvas.getContext('2d');
 
 var gameStart = false;
 
+var img = new Image();  
+img.src = '../images/shelf.jpg'; 
 
 
 /* 
@@ -32,12 +34,8 @@ function main_menu(){
 function startGame(){
 	gameStart = true;
 	clear();
-
     
-/*  Interval = clears the canvas periodically */
-	setInterval(function(){
-		clear();
-	}, 1000/30)
+    context.drawImage(img, 0, 0);
 }
 
 /* Clear function: Clears all things on canvas when called. */
