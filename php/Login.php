@@ -30,7 +30,7 @@ if ($result->num_rows > 0) {
         echo "name: " . $row["name"]. " - email: " . $row["email"]. "<br>";
     }
 } else {
-    echo "0 results";
+    echo "Sorry, we couldn't find that combination of username, password";
 }
 $conn->close();
 
