@@ -35,7 +35,7 @@ function StoreItem(posX, posY, width, height) {
             break;
     }
 
-    var progressWidth = this.width - 50;
+    var progressWidth = this.width - 20;
     var progressHeight = 5;
     var diffY = 8;
     var progressX = 10 + this.x;
