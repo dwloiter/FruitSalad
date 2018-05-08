@@ -1,6 +1,6 @@
 
 
-function ProgressBar(posX, posY, width, height, value, max)
+function ProgressBar(posX, posY, width, height, current, max)
 {
     // position
     this.x = posX;
@@ -14,7 +14,7 @@ function ProgressBar(posX, posY, width, height, value, max)
     this.vcolor = "#FF0000";
     
     // data
-    this.value = value;
+    this.current = current;
     this.max = max;
 }
 
@@ -25,5 +25,5 @@ ProgressBar.prototype.drawToContext = function (theContext)
     theContext.fillRect(this.x, this.y, this.width, this.height);
 
     theContext.fillStyle = this.vcolor;
-    theContext.fillRect(this.x, this.y, this.width * (this.value / this.max), this.height);
+    theContext.fillRect(this.x, this.y, this.width * (this.current / this.max), this.height);
 }
