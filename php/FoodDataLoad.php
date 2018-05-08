@@ -37,5 +37,8 @@ for (; $i < sizeof($FoodDatas); ++$i)
 {
     echo $FoodDatas[$i]->Name," ", $FoodDatas[$i]->Price," ",  $FoodDatas[$i]->Hunger," ",  $FoodDatas[$i]->Meat," ",  $FoodDatas[$i]->Grain," ",  $FoodDatas[$i]->Vegetable," ",  PHP_EOL;
 }
-
 ?>
+
+<script type="text/javascript">
+	var foodDatas = <?php echo(json_encode($FoodDatas)); ?>;
+</script>

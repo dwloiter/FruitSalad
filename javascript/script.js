@@ -11,6 +11,8 @@ var gameStart = false;
 var img = new Image();  
 img.src = '../images/shelf.jpg'; 
 
+var foodDatas;
+
 
 /* 
 ===================
@@ -54,9 +56,30 @@ function clear(){
 document.body.addEventListener("keydown", function(event){
     // If ENTER (keyCode 13) is pressed AND game is not started.
 	if(event.keyCode == 13 && !gameStart){
-		startGame(); // Run startGame
+        var xmlHttp = new XMLHttpRequest();  //not the cross browser way of doing it
+        xmlHttp.open("GET", "../php/FoodDataLoad.php", true);
+        xmlHttp.send(null);
 	}
 
+});
+
+$(function () {
+    $.ajax({
+        url: '../php/FoodDataLoad.php',                  //the script to call to get data          
+        type: "post",
+        data: { getData: true },
+        dataType: 'json',                //data format      
+        success: function (data)          //on recieve of reply
+        {
+            foodDatas = JSON.parse(data);
+
+            // test code
+            document.write(data);
+
+            gameStart = true;
+            canvasApp();
+        }
+    });
 });
 
 /* Run main menu screen */
