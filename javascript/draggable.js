@@ -38,33 +38,33 @@ function canvasApp() {
 	function makeShapes() {
         
         // Item 1
-        tempShape = new StoreItem(100, 50);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
+        tempShape = new StoreItem(50, 30);
+        tempShape.radius = 50 + Math.floor(Math.random()*20);
         shapes.push(tempShape);
         
         // Item 2
-        tempShape = new StoreItem(150, 50);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
+        tempShape = new StoreItem(200, 30);
+        tempShape.radius = 50 + Math.floor(Math.random()*20);
         shapes.push(tempShape);
         
         // Item 3
-        tempShape = new StoreItem(200, 50);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
+        tempShape = new StoreItem(350, 30);
+        tempShape.radius = 50 + Math.floor(Math.random()*20);
         shapes.push(tempShape);
         
         // Item 4
-        tempShape = new StoreItem(100, 100);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
+        tempShape = new StoreItem(50, 180);
+        tempShape.radius = 50 + Math.floor(Math.random()*20);
         shapes.push(tempShape);
         
         // Item 5
-        tempShape = new StoreItem(150, 100);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
+        tempShape = new StoreItem(200, 180);
+        tempShape.radius = 50 + Math.floor(Math.random()*20);
         shapes.push(tempShape);
         
         // Item 6
-        tempShape = new StoreItem(200, 100);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
+        tempShape = new StoreItem(350, 180);
+        tempShape.radius = 50 + Math.floor(Math.random()*20);
         shapes.push(tempShape);
         
 		/*var i;
@@ -85,6 +85,23 @@ function canvasApp() {
 			shapes.push(tempShape);
 		}*/
 	}
+    
+    function Playbutton(top, left, width, height, lWidth, fillColor, lineColor) {
+    context.beginPath();
+    context.rect(250, 350, 200, 100); 
+    context.fillStyle = '#FFFFFF'; 
+    context.fillStyle = 'rgba(225,225,225,0.5)';
+    context.fillRect(25,72,32,32);
+    context.fill(); 
+    context.lineWidth = 2;
+    context.strokeStyle = '#000000'; 
+    context.stroke();
+    context.closePath();
+    context.font = '40pt Kremlin Pro Web';
+    context.fillStyle = '#000000';
+    context.fillText('Start', 345, 415);
+  }
+    
 	
 	function mouseDownListener(evt) {
 		var i;

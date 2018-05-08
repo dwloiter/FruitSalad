@@ -34,6 +34,7 @@ function main_menu(){
 function startGame(){
 	gameStart = true;
 	clear();
+    document.body.removeEventListener("keydown", function(event));
 }
 
 /* Clear function: Clears all things on canvas when called. */
