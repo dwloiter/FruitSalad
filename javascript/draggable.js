@@ -36,54 +36,24 @@ function canvasApp() {
 	}
 	
 	function makeShapes() {
+
+        var i;
+		var startX = 30;
+		var startY = 30;
+        var width = 80;
+        var height = 80;
+        var diffX = 150;
+        var diffY = 150;
+        var rowItemCount = 3;
         
-        // Item 1
-        tempShape = new StoreItem(100, 50);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
-        shapes.push(tempShape);
-        
-        // Item 2
-        tempShape = new StoreItem(150, 50);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
-        shapes.push(tempShape);
-        
-        // Item 3
-        tempShape = new StoreItem(200, 50);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
-        shapes.push(tempShape);
-        
-        // Item 4
-        tempShape = new StoreItem(100, 100);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
-        shapes.push(tempShape);
-        
-        // Item 5
-        tempShape = new StoreItem(150, 100);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
-        shapes.push(tempShape);
-        
-        // Item 6
-        tempShape = new StoreItem(200, 100);
-        tempShape.radius = 5 + Math.floor(Math.random()*20);
-        shapes.push(tempShape);
-        
-		/*var i;
-		var tempRad;
-		var tempX = 0;
-		var tempY = 0;
-        
-        
-        for (i=0; i < 3; i++) {
-			tempRad = 15 + Math.floor(Math.random()*20);
-            
-            tempY = 200;
-            tempX += 90;
+        for (i = 0; i < 6; i++) {
+            var tempX = startX + diffX * (i % rowItemCount);
+            var tempY = startY + diffY * Math.floor(i / rowItemCount);
 			
-			tempShape = new StoreItem(tempX, tempY);
+            tempShape = new StoreItem(tempX, tempY, width, height);
 			
-			tempShape.radius = tempRad;
 			shapes.push(tempShape);
-		}*/
+		}
 	}
 	
 	function mouseDownListener(evt) {

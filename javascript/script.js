@@ -49,7 +49,8 @@ function clear(){
 /* Event listener: If ENTER is pressed... */
 document.body.addEventListener("keydown", function(event){
     // If ENTER (keyCode 13) is pressed AND game is not started.
-	if(event.keyCode == 13 && !gameStart){
+    if (!gameStart) {
+        gameStart = true;
 		canvasApp(); // Run startGame
 	}
 
