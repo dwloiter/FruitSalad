@@ -7,10 +7,14 @@
         <link rel="stylesheet" type="text/css" href="../css/style.css">
         <script src="../javascript/bootstrap.js"></script>
         <script src="../javascript/script.js" defer></script>
+        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <script src = "../javascript/draggable.js"></script>
+        <script src = "../javascript/StoreItem.js"></script>
         
-        <title>Fruit Salad</title>
+        
     </head>
 
     
@@ -42,8 +46,23 @@
 
             <body>
                 <div class = "container text-center">
-                    <canvas id ="gamecanvas" width="400" height="400"></canvas>
+                    <canvas id ="gamecanvas" width="450" height="500"></canvas>
+                    <input type="button" class="btn" id="next" value=">" onclik="next()">
+                    <input type="button" class="btn" id="back" value="<" onclick="back()">
+                    
                 </div>
+                <canvas id="basket" ondrop="drop(event)" ondragover="allowDrop(event)">
+                </canvas>
+                
+                
+                 <input type="button" class="btn" id="finish" value="finish">
+                 
+                <!--
+                <div class="w3-light-grey">
+                    <div id="myBar" class="w3-container w3-green w3-center" style="width:20%">20%</div>
+                </div><br>
+                <button class="w3-button w3-green" onclick="move()">Click Me</button> 
+                -->
                 <div class ="body_text">
                     <h4>Basic controls/Info title:</h4>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque rutrum lobortis congue. Nam interdum dolor quis ante volutpat, nec auctor elit elementum. Integer viverra turpis at nulla pharetra, ut consectetur nulla gravida. Aliquam quis fringilla justo. Nulla facilisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam bibendum mauris in tortor elementum eleifend. Quisque imperdiet metus cursus elit pellentesque fringilla. Aenean cursus eros ipsum, eu pretium lectus suscipit et.</p>

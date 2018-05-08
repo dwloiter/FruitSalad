@@ -12,7 +12,8 @@ canvas {
     display: block;
     width: 80%;
     height: auto;
-    
+    max-height: 600px;
+    max-width: 600px;
 }
 
 html, body {
@@ -34,3 +35,19 @@ html, body {
 }
 
 /* IDs */
+
+
+#basket{
+    position: absolute;
+    left: 383px;
+    top: 710px;
+    border: 2px dashed black;
+    width: 600px;
+    height: 170px;
+}
+
+#myBar{
+    border: 1px solid red;
+    height: 24px;
+    width: 20%;
+}
