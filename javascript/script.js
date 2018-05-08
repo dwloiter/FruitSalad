@@ -55,10 +55,8 @@ function clear(){
 /* Event listener: If ENTER is pressed... */
 document.body.addEventListener("keydown", function(event){
     // If ENTER (keyCode 13) is pressed AND game is not started.
-	if(event.keyCode == 13 && !gameStart){
-        var xmlHttp = new XMLHttpRequest();  //not the cross browser way of doing it
-        xmlHttp.open("GET", "../php/FoodDataLoad.php", true);
-        xmlHttp.send(null);
+    if (event.keyCode == 13 && !gameStart) {
+        startGame();
 	}
 
 });
