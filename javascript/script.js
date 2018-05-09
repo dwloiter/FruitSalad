@@ -3,7 +3,7 @@
 ==== VARIABLES ==== 
 ===================
 */
-var canvas = document.getElementById('gamecanvas');
+var canvas = document.getElementById('gameCanvas');
 var context = canvas.getContext('2d');
 
 var gameStart = false;
@@ -36,16 +36,12 @@ function main_menu(){
 function startGame(){
 	gameStart = true;
 	clear();
-    
-    context.drawImage(img, 0, 0);
 }
 
 /* Clear function: Clears all things on canvas when called. */
 function clear(){
 	context.clearRect(0, 0, 1000, 1000);
 }
-
-
 
 /*
 =====================
@@ -56,9 +52,9 @@ function clear(){
 document.body.addEventListener("keydown", function(event){
     // If ENTER (keyCode 13) is pressed AND game is not started.
     if (event.keyCode == 13 && !gameStart) {
-        startGame();
-	}
-
+        gameStart = true;
+		    canvasApp(); // Run startGame
+	  }
 });
 
 $(function () {
@@ -70,9 +66,6 @@ $(function () {
         success: function (data)          //on recieve of reply
         {
             foodDatas = data;
-
-            gameStart = true;
-            canvasApp();
         }
     });
 });
