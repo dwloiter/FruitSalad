@@ -47,13 +47,12 @@ function clear(){
 =====================
 */
 /* Event listener: If ENTER is pressed... */
-document.body.addEventListener("keydown", function(event){
+document.body.addEventListener("mousedown", function(event){
     // If ENTER (keyCode 13) is pressed AND game is not started.
     if (!gameStart) {
         gameStart = true;
-		canvasApp(); // Run startGame
-	}
-
+		    canvasApp(); // Run startGame
+	  }
 });
 
 /* Run main menu screen */
