@@ -69,10 +69,7 @@ $(function () {
         dataType: 'json',                //data format      
         success: function (data)          //on recieve of reply
         {
-            foodDatas = JSON.parse(data);
-
-            // test code
-            document.write(data);
+            foodDatas = data;
 
             gameStart = true;
             canvasApp();

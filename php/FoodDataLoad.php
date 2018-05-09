@@ -27,10 +27,9 @@ foreach($lines as $line)
     $fd->Meat = intval($data[3]);
     $fd->Grain = intval($data[4]);
     $fd->Vegetable = intval($data[5]);
+	$fd->Expiration = intval($data[6]);
     array_push($FoodDatas, $fd);
 }
-
-$i = 0;
 
 print(json_encode($FoodDatas));
 ?>
