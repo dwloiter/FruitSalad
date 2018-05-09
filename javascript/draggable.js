@@ -20,7 +20,9 @@ function canvasApp() {
 	var timer;
 	var targetX;
 	var targetY;
-	var easeAmount;
+    var easeAmount;
+
+    var btnGoHome;
 	
 	function init() {
 		numShapes = 6;
@@ -28,7 +30,9 @@ function canvasApp() {
 		
 		shapes = [];
 		
-		makeShapes();
+        makeShapes();
+        // TODO: test button
+        btnGoHome = new Button(300, 300, 100, 40, "GoHome");
 		
 		drawScreen();
 		
@@ -169,7 +173,9 @@ function canvasApp() {
 		//bg
 		context.drawImage(img, 0, 0);
 		
-		drawShapes();		
+        drawShapes();		
+
+        btnGoHome.drawToContext(context);
 	}
 	
 }
