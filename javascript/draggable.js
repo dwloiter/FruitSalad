@@ -36,6 +36,7 @@ function canvasApp() {
 	}
 	
 	function makeShapes() {
+<<<<<<< HEAD
         
         // Item 1
         tempShape = new StoreItem(50, 30);
@@ -102,6 +103,27 @@ function canvasApp() {
     context.fillText('Start', 345, 415);
   }
     
+=======
+
+        var i;
+		var startX = 30;
+		var startY = 30;
+        var width = 80;
+        var height = 80;
+        var diffX = 150;
+        var diffY = 150;
+        var rowItemCount = 3;
+        
+        for (i = 0; i < 6; i++) {
+            var tempX = startX + diffX * (i % rowItemCount);
+            var tempY = startY + diffY * Math.floor(i / rowItemCount);
+			
+            tempShape = new StoreItem(tempX, tempY, width, height);
+			
+			shapes.push(tempShape);
+		}
+	}
+>>>>>>> master
 	
 	function mouseDownListener(evt) {
 		var i;
