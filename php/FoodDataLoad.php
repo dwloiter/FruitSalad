@@ -27,15 +27,9 @@ foreach($lines as $line)
     $fd->Meat = intval($data[3]);
     $fd->Grain = intval($data[4]);
     $fd->Vegetable = intval($data[5]);
+	$fd->Expiration = intval($data[6]);
     array_push($FoodDatas, $fd);
 }
 
-$i = 0;
-
-// test output
-for (; $i < sizeof($FoodDatas); ++$i)
-{
-    echo $FoodDatas[$i]->Name," ", $FoodDatas[$i]->Price," ",  $FoodDatas[$i]->Hunger," ",  $FoodDatas[$i]->Meat," ",  $FoodDatas[$i]->Grain," ",  $FoodDatas[$i]->Vegetable," ",  PHP_EOL;
-}
-
+print(json_encode($FoodDatas));
 ?>
