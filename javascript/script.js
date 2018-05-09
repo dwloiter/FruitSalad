@@ -13,7 +13,6 @@ img.src = '../images/shelf.jpg';
 
 var foodDatas;
 
-
 /* 
 ===================
 ==== FUNCTIONS ==== 
@@ -48,10 +47,10 @@ function clear(){
 ===== Main Code =====
 =====================
 */
-/* Event listener: If ENTER is pressed... */
-document.body.addEventListener("keydown", function(event){
-    // If ENTER (keyCode 13) is pressed AND game is not started.
-    if (event.keyCode == 13 && !gameStart) {
+/* Event listener: If mousedown... */
+document.body.addEventListener("mousedown", function(event){
+    // If game is not started.
+    if (!gameStart) {
         gameStart = true;
 		    canvasApp(); // Run startGame
 	  }
