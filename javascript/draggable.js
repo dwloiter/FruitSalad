@@ -22,6 +22,8 @@ function canvasApp() {
 	var targetY;
     var easeAmount;
 
+    var BUTTON_GO_HOME = 1;
+
     var btnGoHome;
 	
 	function init() {
@@ -32,7 +34,7 @@ function canvasApp() {
 		
         makeShapes();
         // TODO: test button
-        btnGoHome = new Button(300, 300, 100, 40, "GoHome");
+        btnGoHome = new Button(300, 300, 100, 40, "GoHome", canvasApp, BUTTON_GO_HOME);
 		
 		drawScreen();
 		
@@ -98,7 +100,10 @@ function canvasApp() {
 			
 			//start timer
 			timer = setInterval(onTimerTick, 1000/30);
-		}
+        }
+        else if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
+            GoHome();
+        }
 		theCanvas.removeEventListener("mousedown", mouseDownListener, false);
 		window.addEventListener("mouseup", mouseUpListener, false);
 		
@@ -176,6 +181,10 @@ function canvasApp() {
         drawShapes();		
 
         btnGoHome.drawToContext(context);
-	}
+    }
+
+    function GoHome() {
+        document.writeln("Go Home");
+    }
 	
 }

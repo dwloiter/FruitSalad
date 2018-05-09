@@ -1,6 +1,6 @@
 
 
-function Button(posX, posY, width, height, message)
+function Button(posX, posY, width, height, message, value)
 {
     // position
     this.x = posX;
@@ -10,14 +10,26 @@ function Button(posX, posY, width, height, message)
     this.width = width;
     this.height = height;
 
+    // color
     this.bgcolor = "#00FFFF";
     this.textColor = "#FF0000";
     
     // data
     this.message = message;
+    this.value = value;
 }
 
-// draw progressbar
+Button.prototype.mouseDownListener = function (mouseX, mouseY)
+{
+    if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// draw button
 Button.prototype.drawToContext = function (theContext)
 {
     theContext.fillStyle = this.bgcolor;
