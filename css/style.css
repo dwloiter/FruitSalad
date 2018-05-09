@@ -12,7 +12,8 @@ canvas {
     display: block;
     width: 80%;
     height: auto;
-    
+    max-height: 600px;
+    max-width: 600px;
 }
 
 html, body {
