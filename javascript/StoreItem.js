@@ -2,23 +2,6 @@
 var fruit_apple = new Image();  
 fruit_apple.src = '../images/apple.png'; 
 
-
-<<<<<<< HEAD
-function StoreItem(posX, posY) {
-		this.x = posX;
-		this.y = posY;
-		this.velX = 0;
-		this.velY = 0;
-		this.accelX = 0;
-		this.accelY = 0;
-		this.color = "#FF0000";
-        this.radius = 10;
-}
-
-//The function below returns a Boolean value representing whether the point with the coordinates supplied "hits" the particle.
-StoreItem.prototype.hitTest = function(hitX,hitY) {
-	return((hitX > this.x - this.radius)&&(hitX < this.x + this.radius)&&(hitY > this.y - this.radius)&&(hitY < this.y + this.radius));
-=======
 function StoreItem(posX, posY, width, height) {
     // position
     this.x = posX;
@@ -70,23 +53,16 @@ function StoreItem(posX, posY, width, height) {
 //The function below returns a Boolean value representing whether the point with the coordinates supplied "hits" the particle.
 StoreItem.prototype.hitTest = function (hitX, hitY) {
     return (hitX > this.x && hitX < this.x + this.width && hitY > this.y && hitY < this.y + this.height);
->>>>>>> master
 }
 
 //A function for drawing the particle.
 StoreItem.prototype.drawToContext = function (theContext) {
-<<<<<<< HEAD
 
-    
-    theContext.drawImage(fruit_apple, this.x, this.y, this.radius, this.radius);
-	//theContext.fillStyle = this.color;
-	//theContext.fillRect(this.x - this.radius, this.y - this.radius, 2*this.radius, 2*this.radius);
-=======
     theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
 
     this.hungerProgressBar.drawToContext(theContext);
     this.meatProgressBar.drawToContext(theContext);
     this.grainProgressBar.drawToContext(theContext);
     this.vegetableProgressBar.drawToContext(theContext);
->>>>>>> master
+
 }
