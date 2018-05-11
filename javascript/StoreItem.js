@@ -7,6 +7,8 @@ function StoreItem(posX, posY, width, height) {
     // position
     this.x = posX;
     this.y = posY;
+    this.origX = posX;
+    this.origY = posY;
 
     // size
     this.width = width;
@@ -49,6 +51,22 @@ function StoreItem(posX, posY, width, height) {
     this.grainProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.grain, max);
     progressCurY += diffY;
     this.vegetableProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.vegetable, max);
+}
+
+StoreItem.prototype.refreshProgressBar = function() {
+    this.hungerProgressBar.current = this.hunger;
+    this.meatProgressBar.current = this.meat;
+    this.grainProgressBar.current = this.grain;
+    this.vegetableProgressBar.current = this.vegetable;
+}
+
+StoreItem.prototype.setX = function(x) {
+    var diff = x - this.x;
+    this.x = x;
+    this.hungerProgressBar.x += diff;
+    this.meatProgressBar.x += diff;
+    this.grainProgressBar.x += diff;
+    this.vegetableProgressBar.x += diff;
 }
 
 //The function below returns a Boolean value representing whether the point with the coordinates supplied "hits" the particle.

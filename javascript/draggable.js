@@ -25,6 +25,8 @@ function canvasApp() {
 	var targetX;
 	var targetY;
     var easeAmount;
+	var cart = [];
+	var currentPage;
 
     var BUTTON_GO_HOME = 1;
     var BUTTON_CART_LEFT = 2;
@@ -163,6 +165,9 @@ function canvasApp() {
 		if (dragging) {
 			dragging = false;
 			window.removeEventListener("mousemove", mouseMoveListener, false);
+			getShapes();
+			targetX = shapes[shapes.length - 1].origX;
+			targetY = shapes[shapes.length - 1].origY;
 		}
 	}
 
@@ -198,18 +203,56 @@ function canvasApp() {
 			shapes[i].drawToContext(context);
 		}
 	}
+
+    function drawCart() {
+		var i;
+		currentPage = 0;
+        var cartMaxItem = 4;
+		var startIndex = currentPage * cartMaxItem;
+		var max = Math.min(cartMaxItem, cart.length - startIndex);
+		for (i = currentPage; i < cartMaxItem; ++i){
+			cart[startIndex + i].setX(i * 80 + 40);
+			cart[startIndex + i].drawToContext(context);
+		}
+	}
 	
 	function drawScreen() {
 		//bg
 		context.drawImage(img, 0, 0);
 		
-        drawShapes();		
-
+        drawShapes();
+        
         btnGoHome.drawToContext(context);
         btnCartLeft.drawToContext(context);
         btnCartRight.drawToContext(context);
-    }
 
+        if (cart != null) {
+            drawCart();
+        }
+
+    }
+    
+    	function getShapes() {
+		var i;
+		if(mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height){
+			var temp = new StoreItem(cart.length * 80, 370, 80, 80);
+			// need to copy values
+			temp.hunger = shapes[shapes.length -1].hunger;
+			temp.grain = shapes[shapes.length -1].grain;
+			temp.vegetable = shapes[shapes.length -1].vegetable;
+			temp.meat = shapes[shapes.length -1].meat;
+			temp.refreshProgressBar();
+			cart.push(temp);
+		}
+	}
+	
+	
+	function clearCart(event){
+		if(mouseX  && mouseY){
+			context.clearRect(0, 370, 450, 130);
+		}			
+	}
+	
     function GoHome() {
         document.writeln("Go Home");
     }
@@ -222,6 +265,5 @@ function canvasApp() {
     function CartRight() {
         document.writeln("cart right");
 
-    }
-	
+    }	
 }
