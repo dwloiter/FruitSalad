@@ -1,6 +1,10 @@
 //JavaScript HTML5 Canvas example by Dan Gries, rectangleworld.com.
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
+var leftImg = new Image();
+leftImg.src = '../images/left.png';
+var rightImg = new Image();
+rightImg.src = '../images/right.png'; 
 
 function canvasApp() {
 	
@@ -23,6 +27,8 @@ function canvasApp() {
     var easeAmount;
 
     var BUTTON_GO_HOME = 1;
+    var BUTTON_CART_LEFT = 2;
+    var BUTTON_CART_RIGHT = 3;
 
     var btnGoHome;
 	
@@ -33,13 +39,26 @@ function canvasApp() {
 		shapes = [];
 		
         makeShapes();
-        // TODO: test button
-        btnGoHome = new Button(300, 300, 100, 40, "GoHome", canvasApp, BUTTON_GO_HOME);
-		
+
+        // create buttons
+        btnGoHome = new Button(300, 300, 100, 40, "GoHome", BUTTON_GO_HOME, null);
+
+        var CART_ARROW_BTN_WIDTH = 38;
+        var CART_ARROW_BTN_HEIGHT = 108;
+        var CART_ARROW_DIFF_X = 3;
+        var CART_ARROW_Y = 430;
+
+        btnCartLeft = new Button(CART_ARROW_DIFF_X, CART_ARROW_Y - CART_ARROW_BTN_HEIGHT / 2,
+            CART_ARROW_BTN_WIDTH, CART_ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
+        btnCartRight = new Button(theCanvas.width - CART_ARROW_DIFF_X - CART_ARROW_BTN_WIDTH, CART_ARROW_Y - CART_ARROW_BTN_HEIGHT / 2,
+            CART_ARROW_BTN_WIDTH, CART_ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
+
+        // draw
 		drawScreen();
 		
 		theCanvas.addEventListener("mousedown", mouseDownListener, false);
-	}
+    }
+
 	
 	function makeShapes() {
 
@@ -103,6 +122,12 @@ function canvasApp() {
         }
         else if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
             GoHome();
+        }
+        else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
+            CartLeft();
+        }
+        else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
+            CartRight();
         }
 		theCanvas.removeEventListener("mousedown", mouseDownListener, false);
 		window.addEventListener("mouseup", mouseUpListener, false);
@@ -181,10 +206,22 @@ function canvasApp() {
         drawShapes();		
 
         btnGoHome.drawToContext(context);
+        btnCartLeft.drawToContext(context);
+        btnCartRight.drawToContext(context);
     }
 
     function GoHome() {
         document.writeln("Go Home");
+    }
+
+    function CartLeft() {
+        document.writeln("cart left");
+
+    }
+
+    function CartRight() {
+        document.writeln("cart right");
+
     }
 	
 }
