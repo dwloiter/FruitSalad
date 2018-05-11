@@ -2,7 +2,6 @@
 var fruit_apple = new Image();  
 fruit_apple.src = '../images/apple.png'; 
 
-
 function StoreItem(posX, posY, width, height) {
     // position
     this.x = posX;
@@ -76,10 +75,12 @@ StoreItem.prototype.hitTest = function (hitX, hitY) {
 
 //A function for drawing the particle.
 StoreItem.prototype.drawToContext = function (theContext) {
+
     theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
 
     this.hungerProgressBar.drawToContext(theContext);
     this.meatProgressBar.drawToContext(theContext);
     this.grainProgressBar.drawToContext(theContext);
     this.vegetableProgressBar.drawToContext(theContext);
+
 }
