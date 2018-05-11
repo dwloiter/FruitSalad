@@ -1,21 +1,5 @@
-//JavaScript HTML5 Canvas example by Dan Gries, rectangleworld.com.
-//The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
-
-
-//For debug messages
-var Debugger = function() { };
-Debugger.log = function(message) {
-	try {
-		console.log(message);
-	}
-	catch (exception) {
-		return;
-	}
-}
-
 function canvasApp() {
-	
-	var theCanvas = document.getElementById("gamecanvas");
+	var theCanvas = document.getElementById("gameCanvas");
 	var context = theCanvas.getContext("2d");
 	
 	init();
@@ -32,6 +16,8 @@ function canvasApp() {
 	var targetX;
 	var targetY;
 	var easeAmount;
+	var cart = [];
+	var currentPage;
 	
 	function init() {
 		numShapes = 6;
@@ -44,41 +30,27 @@ function canvasApp() {
 		drawScreen();
 		
 		theCanvas.addEventListener("mousedown", mouseDownListener, false);
+	
 	}
 	
 	function makeShapes() {
-		var i;
-		var tempX;
-		var tempY;
-		var tempRad;
-		var tempR;
-		var tempG;
-		var tempB;
-		var tempA;
-		var tempColor;
-		for (i=0; i < numShapes; i++) {
-			tempRad = 5 + Math.floor(Math.random()*20);
-			tempX = Math.random()*(theCanvas.width - tempRad);
-			tempY = Math.random()*(theCanvas.height - tempRad);
+
+        var i;
+		var startX = 30;
+		var startY = 30;
+        var width = 80;
+        var height = 80;
+        var diffX = 150;
+        var diffY = 150;
+        var rowItemCount = 3;
+        
+        for (i = 0; i < numShapes; i++) {
+
+            var tempX = startX + diffX * (i % rowItemCount);
+            var tempY = startY + diffY * Math.floor(i / rowItemCount);
 			
-			//we set a randomized color, including a random alpha (transparency) value.
-			//The color is set using the rgba() method.
-			tempR = Math.floor(Math.random()*255);
-			tempG = Math.floor(Math.random()*255);
-			tempB = Math.floor(Math.random()*255);
-			tempA = 0.3 + 0.5*Math.random();
-			tempColor = "rgba(" + tempR + "," + tempG + "," + tempB + "," + tempA + ")";
+            tempShape = new StoreItem(tempX, tempY, width, height);
 			
-			//randomly select either a circle or a square
-			if (Math.random() < 0.5) {
-				tempShape = new StoreItem(tempX, tempY);
-			}
-			else {
-				tempShape = new StoreItem(tempX, tempY);
-			}
-			
-			tempShape.color = tempColor;
-			tempShape.radius = tempRad;
 			shapes.push(tempShape);
 		}
 	}
@@ -156,6 +128,9 @@ function canvasApp() {
 		if (dragging) {
 			dragging = false;
 			window.removeEventListener("mousemove", mouseMoveListener, false);
+			getShapes();
+			targetX = shapes[shapes.length - 1].origX;
+			targetY = shapes[shapes.length - 1].origY;
 		}
 	}
 
@@ -191,19 +166,78 @@ function canvasApp() {
 			shapes[i].drawToContext(context);
 		}
 	}
+
+	function drawCart() {
+		var i;
+		currentPage = 0;
+		var cartMaxItem = 4;
+		var startIndex = currentPage * cartMaxItem;
+		for (i = currentPage; cart != null && i < cartMaxItem; ++i){
+			cart[startIndex + i].x = i * 80;
+			cart[startIndex + i].drawToContext(context);
+		}
+	}
 	
 	function drawScreen() {
 		//bg
 		context.fillStyle = "#ffffff";
         context.fillRect(0, 0, theCanvas.width, theCanvas.height);
 		context.drawImage(img, 0, 0, 450, 320);
-		context.rect(0, 370, canvas.width, 130);
+		context.rect(0, 370, 450, 130);
 		context.stroke();
-		drawShapes();			
-	}
-	function next(){
-		context.drawImage(img2, 0, 0, 450, 320);
+		
 		drawShapes();
+		drawCart();
+		drawNext();
+		drawBack();
 	}
 	
+	function getShapes() {
+		var i;
+		if(mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height){
+			var temp = new StoreItem(cart.length * 80, 370, 80, 80);
+			// need to copy values
+			temp.hunger = shapes[shapes.length -1].hunger;
+			temp.grain = shapes[shapes.length -1].grain;
+			temp.vegetable = shapes[shapes.length -1].vegetable;
+			temp.meat = shapes[shapes.length -1].meat;
+			temp.refreshProgressBar();
+			cart.push(temp);
+		}
+	}
+	
+	
+	function clearCart(event){
+		if(mouseX  && mouseY){
+			context.clearRect(0, 370, 450, 130);
+			drawNext();
+			drawBack();
+		}			
+	}
+	
+	function drawNext(){
+		context.beginPath();
+		context.moveTo(440, 435);
+		context.lineTo(420, 480);
+		context.lineTo(420, 390);
+		context.fill();
+
+		context.fillStyle = "#000000";
+	}
+	
+	function drawBack(){
+		context.beginPath();
+		context.moveTo(10, 435);
+		context.lineTo(30, 480);
+		context.lineTo(30, 390);
+		context.fill();
+		context.fillStyle = "#000000";
+		
+	}
+	
+	function displayPage(){
+		if(currentPage > 0){
+			
+		}
+	}
 }
