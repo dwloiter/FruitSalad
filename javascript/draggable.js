@@ -1,6 +1,10 @@
 //JavaScript HTML5 Canvas example by Dan Gries, rectangleworld.com.
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
+var leftImg = new Image();
+leftImg.src = '../images/left.png';
+var rightImg = new Image();
+rightImg.src = '../images/right.png'; 
 
 function canvasApp() {
 	
@@ -20,7 +24,15 @@ function canvasApp() {
 	var timer;
 	var targetX;
 	var targetY;
-	var easeAmount;
+    var easeAmount;
+	var cart = [];
+	var currentPage;
+
+    var BUTTON_GO_HOME = 1;
+    var BUTTON_CART_LEFT = 2;
+    var BUTTON_CART_RIGHT = 3;
+
+    var btnGoHome;
 	
 	function init() {
 		numShapes = 6;
@@ -28,12 +40,27 @@ function canvasApp() {
 		
 		shapes = [];
 		
-		makeShapes();
-		
+        makeShapes();
+
+        // create buttons
+        btnGoHome = new Button(300, 300, 100, 40, "GoHome", BUTTON_GO_HOME, null);
+
+        var CART_ARROW_BTN_WIDTH = 38;
+        var CART_ARROW_BTN_HEIGHT = 108;
+        var CART_ARROW_DIFF_X = 3;
+        var CART_ARROW_Y = 430;
+
+        btnCartLeft = new Button(CART_ARROW_DIFF_X, CART_ARROW_Y - CART_ARROW_BTN_HEIGHT / 2,
+            CART_ARROW_BTN_WIDTH, CART_ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
+        btnCartRight = new Button(theCanvas.width - CART_ARROW_DIFF_X - CART_ARROW_BTN_WIDTH, CART_ARROW_Y - CART_ARROW_BTN_HEIGHT / 2,
+            CART_ARROW_BTN_WIDTH, CART_ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
+
+        // draw
 		drawScreen();
 		
 		theCanvas.addEventListener("mousedown", mouseDownListener, false);
-	}
+    }
+
 	
 	function makeShapes() {
 
@@ -94,7 +121,16 @@ function canvasApp() {
 			
 			//start timer
 			timer = setInterval(onTimerTick, 1000/30);
-		}
+        }
+        else if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
+            GoHome();
+        }
+        else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
+            CartLeft();
+        }
+        else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
+            CartRight();
+        }
 		theCanvas.removeEventListener("mousedown", mouseDownListener, false);
 		window.addEventListener("mouseup", mouseUpListener, false);
 		
@@ -129,6 +165,9 @@ function canvasApp() {
 		if (dragging) {
 			dragging = false;
 			window.removeEventListener("mousemove", mouseMoveListener, false);
+			getShapes();
+			targetX = shapes[shapes.length - 1].origX;
+			targetY = shapes[shapes.length - 1].origY;
 		}
 	}
 
@@ -164,12 +203,67 @@ function canvasApp() {
 			shapes[i].drawToContext(context);
 		}
 	}
+
+    function drawCart() {
+		var i;
+		currentPage = 0;
+        var cartMaxItem = 4;
+		var startIndex = currentPage * cartMaxItem;
+		var max = Math.min(cartMaxItem, cart.length - startIndex);
+		for (i = currentPage; i < cartMaxItem; ++i){
+			cart[startIndex + i].setX(i * 80 + 40);
+			cart[startIndex + i].drawToContext(context);
+		}
+	}
 	
 	function drawScreen() {
 		//bg
 		context.drawImage(img, 0, 0);
 		
-		drawShapes();		
+        drawShapes();
+        
+        btnGoHome.drawToContext(context);
+        btnCartLeft.drawToContext(context);
+        btnCartRight.drawToContext(context);
+
+        if (cart != null) {
+            drawCart();
+        }
+
+    }
+    
+    	function getShapes() {
+		var i;
+		if(mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height){
+			var temp = new StoreItem(cart.length * 80, 370, 80, 80);
+			// need to copy values
+			temp.hunger = shapes[shapes.length -1].hunger;
+			temp.grain = shapes[shapes.length -1].grain;
+			temp.vegetable = shapes[shapes.length -1].vegetable;
+			temp.meat = shapes[shapes.length -1].meat;
+			temp.refreshProgressBar();
+			cart.push(temp);
+		}
 	}
 	
+	
+	function clearCart(event){
+		if(mouseX  && mouseY){
+			context.clearRect(0, 370, 450, 130);
+		}			
+	}
+	
+    function GoHome() {
+        document.writeln("Go Home");
+    }
+
+    function CartLeft() {
+        document.writeln("cart left");
+
+    }
+
+    function CartRight() {
+        document.writeln("cart right");
+
+    }	
 }
