@@ -26,7 +26,7 @@ function canvasApp() {
 	var targetY;
     var easeAmount;
 	var cart = [];
-	var currentPage;
+	var currentPage = 0;
 
     var BUTTON_GO_HOME = 1;
     var BUTTON_CART_LEFT = 2;
@@ -206,11 +206,10 @@ function canvasApp() {
 
     function drawCart() {
 		var i;
-		currentPage = 0;
         var cartMaxItem = 4;
 		var startIndex = currentPage * cartMaxItem;
 		var max = Math.min(cartMaxItem, cart.length - startIndex);
-		for (i = currentPage; i < cartMaxItem; ++i){
+		for (i = 0; i < max; ++i){
 			cart[startIndex + i].setX(i * 80 + 40);
 			cart[startIndex + i].drawToContext(context);
 		}
@@ -246,24 +245,25 @@ function canvasApp() {
 		}
 	}
 	
-	
-	function clearCart(event){
-		if(mouseX  && mouseY){
-			context.clearRect(0, 370, 450, 130);
-		}			
-	}
-	
     function GoHome() {
         document.writeln("Go Home");
     }
 
     function CartLeft() {
-        document.writeln("cart left");
+		if(currentPage > 0){
+			currentPage--;
+		}
+		drawScreen();
+        //document.writeln("cart left");
 
     }
 
     function CartRight() {
-        document.writeln("cart right");
+		if(currentPage != (cart.length / 4)){
+			currentPage++;
+		}
+		drawScreen();
+        //document.writeln("cart right");
 
     }	
 }
