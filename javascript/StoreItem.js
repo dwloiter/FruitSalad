@@ -1,8 +1,8 @@
 // Simple class example
 var fruit_apple = new Image();  
-fruit_apple.src = '../images/apple.png'; 
+fruit_apple.src = '../images/apple.png';
 
-function StoreItem(posX, posY, width, height) {
+function StoreItem(posX, posY, width, height, foodData) {
     // position
     this.x = posX;
     this.y = posY;
@@ -14,26 +14,37 @@ function StoreItem(posX, posY, width, height) {
     this.height = height;
 
     // temp data. max is 100
-    this.hunger = 10;
+    if (foodData != null) {
+        this.foodData = foodData;
+        this.hunger = foodData.Hunger;
+        this.meat = foodData.Meat;
+        this.grain = foodData.Grain;
+        this.vegetable = foodData.Vegetable;
+        this.name = foodData.Name;
+    }
+    else {
+        this.hunger = 10;
 
-    switch (Math.floor(Math.random() * 3)) {
-        case 1:
-            this.meat = 10;
-            this.grain = 0;
-            this.vegetable = 0;
-            break;
+        switch (Math.floor(Math.random() * 3)) {
+            case 1:
+                this.meat = 10;
+                this.grain = 0;
+                this.vegetable = 0;
+                break;
 
-        case 2:
-            this.meat = 0;
-            this.grain = 10;
-            this.vegetable = 0;
-            break;
+            case 2:
+                this.meat = 0;
+                this.grain = 10;
+                this.vegetable = 0;
+                break;
 
-        default:
-            this.meat = 0;
-            this.grain = 0;
-            this.vegetable = 10;
-            break;
+            default:
+                this.meat = 0;
+                this.grain = 0;
+                this.vegetable = 10;
+                break;
+        }
+        this.name = null;
     }
 
     var progressWidth = this.width - 20;
@@ -68,6 +79,15 @@ StoreItem.prototype.setX = function(x) {
     this.vegetableProgressBar.x += diff;
 }
 
+StoreItem.prototype.setY = function (y) {
+    var diff = y - this.y;
+    this.y = y;
+    this.hungerProgressBar.y += diff;
+    this.meatProgressBar.y += diff;
+    this.grainProgressBar.y += diff;
+    this.vegetableProgressBar.y += diff;
+}
+
 //The function below returns a Boolean value representing whether the point with the coordinates supplied "hits" the particle.
 StoreItem.prototype.hitTest = function (hitX, hitY) {
     return (hitX > this.x && hitX < this.x + this.width && hitY > this.y && hitY < this.y + this.height);
@@ -76,7 +96,12 @@ StoreItem.prototype.hitTest = function (hitX, hitY) {
 //A function for drawing the particle.
 StoreItem.prototype.drawToContext = function (theContext) {
 
-    theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
+    if (this.name == null) {
+        theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
+    }
+    else {
+        theContext.drawImage(foodImages.get(this.name), this.x, this.y, this.width, this.height);
+    }
 
     this.hungerProgressBar.drawToContext(theContext);
     this.meatProgressBar.drawToContext(theContext);

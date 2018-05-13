@@ -72,15 +72,28 @@ function canvasApp() {
         var diffX = 150;
         var diffY = 150;
         var rowItemCount = 3;
-        
-        for (i = 0; i < 6; i++) {
-            var tempX = startX + diffX * (i % rowItemCount);
-            var tempY = startY + diffY * Math.floor(i / rowItemCount);
-			
-            tempShape = new StoreItem(tempX, tempY, width, height);
-			
-			shapes.push(tempShape);
-		}
+
+        if (foodDatas != null) {
+            for (i = 0; i < foodDatas.length; i++) {
+                var index = i % numShapes;
+                var tempX = startX + diffX * (index % rowItemCount);
+                var tempY = startY + diffY * Math.floor(index / rowItemCount);
+
+                tempShape = new StoreItem(tempX, tempY, width, height, foodDatas[i]);
+
+                shapes.push(tempShape);
+            }
+        }
+        else {
+            for (i = 0; i < 6; i++) {
+                var tempX = startX + diffX * (i % rowItemCount);
+                var tempY = startY + diffY * Math.floor(i / rowItemCount);
+
+                tempShape = new StoreItem(tempX, tempY, width, height, null);
+
+                shapes.push(tempShape);
+            }
+        }
 	}
 	
 	function mouseDownListener(evt) {
@@ -107,8 +120,8 @@ function canvasApp() {
 		if (dragging) {
 			window.addEventListener("mousemove", mouseMoveListener, false);
 			
-			//place currently dragged shape on top
-			shapes.push(shapes.splice(dragIndex,1)[0]);
+            //place currently dragged shape on top
+            shapes.splice(numShapes - 1, 0, shapes.splice(dragIndex, 1)[0]);
 			
 			//shapeto drag is now last one in array
 			dragHoldX = mouseX - shapes[numShapes-1].x;
@@ -166,8 +179,8 @@ function canvasApp() {
 			dragging = false;
 			window.removeEventListener("mousemove", mouseMoveListener, false);
 			getShapes();
-			targetX = shapes[shapes.length - 1].origX;
-			targetY = shapes[shapes.length - 1].origY;
+			targetX = shapes[numShapes - 1].origX;
+            targetY = shapes[numShapes - 1].origY;
 		}
 	}
 
@@ -232,15 +245,15 @@ function canvasApp() {
 
     }
     
-    	function getShapes() {
+    function getShapes() {
 		var i;
-		if(mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height){
-			var temp = new StoreItem(cart.length * 80, 370, 80, 80);
+        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
+            var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[numShapes - 1].foodData);
 			// need to copy values
-			temp.hunger = shapes[shapes.length -1].hunger;
-			temp.grain = shapes[shapes.length -1].grain;
-			temp.vegetable = shapes[shapes.length -1].vegetable;
-			temp.meat = shapes[shapes.length -1].meat;
+            temp.hunger = shapes[numShapes -1].hunger;
+            temp.grain = shapes[numShapes -1].grain;
+            temp.vegetable = shapes[numShapes -1].vegetable;
+            temp.meat = shapes[numShapes -1].meat;
 			temp.refreshProgressBar();
 			cart.push(temp);
 		}

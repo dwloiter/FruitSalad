@@ -52,9 +52,11 @@ document.body.addEventListener("mousedown", function(event){
     // If game is not started.
     if (!gameStart) {
         gameStart = true;
-		    canvasApp(); // Run startGame
-	  }
+	    canvasApp(); // Run startGame
+    }
 });
+
+var foodImages = new Map();
 
 $(function () {
     $.ajax({
@@ -65,6 +67,13 @@ $(function () {
         success: function (data)          //on recieve of reply
         {
             foodDatas = data;
+            var i;
+            for (i = 0; i < foodDatas.length; ++i)
+            {
+                var tempImage = new Image();
+                tempImage.src = '../images/Food/' + foodDatas[i].Name + '.png';
+                foodImages.set(foodDatas[i].Name, tempImage);
+            }
         }
     });
 });
