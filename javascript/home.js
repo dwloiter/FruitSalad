@@ -12,9 +12,7 @@ function canvasApp() {
 	var context = theCanvas.getContext("2d");
 	
 	init();
-	
-	var numShapes;
-	var shapes;
+	var dish = [];
 	var dragIndex;
 	var dragging;
 	var mouseX;
@@ -28,23 +26,19 @@ function canvasApp() {
 	var cart = [];
 	var currentPage = 0;
 
-    var BUTTON_GO_HOME = 1;
+    var BUTTON_EAT = 1;
     var BUTTON_CART_LEFT = 2;
     var BUTTON_CART_RIGHT = 3;
-
-    var btnGoHome;
 	
+    var btnEat
 	function init() {
-		numShapes = 6;
-		easeAmount = 0.45;
 		
-		shapes = [];
-		
+        easeAmount = 0.45;
+        
         makeShapes();
-
-        // create buttons
-        btnGoHome = new Button(300, 300, 100, 40, "GoHome", BUTTON_GO_HOME, null);
-
+        
+        btnEat = new Button(300, 200, 100, 40, "Eat", BUTTON_GO_HOME, null);
+        
         var CART_ARROW_BTN_WIDTH = 38;
         var CART_ARROW_BTN_HEIGHT = 108;
         var CART_ARROW_DIFF_X = 3;
@@ -72,28 +66,15 @@ function canvasApp() {
         var diffX = 150;
         var diffY = 150;
         var rowItemCount = 3;
-
-        if (foodDatas != null) {
-            for (i = 0; i < foodDatas.length; i++) {
-                var index = i % numShapes;
-                var tempX = startX + diffX * (index % rowItemCount);
-                var tempY = startY + diffY * Math.floor(index / rowItemCount);
-
-                tempShape = new StoreItem(tempX, tempY, width, height, foodDatas[i]);
-
-                shapes.push(tempShape);
-            }
-        }
-        else {
-            for (i = 0; i < 6; i++) {
-                var tempX = startX + diffX * (i % rowItemCount);
-                var tempY = startY + diffY * Math.floor(i / rowItemCount);
-
-                tempShape = new StoreItem(tempX, tempY, width, height, null);
-
-                shapes.push(tempShape);
-            }
-        }
+        
+        for (i = 0; i < cart.length; i++) {
+            var tempX = startX + diffX * (i % rowItemCount);
+            var tempY = startY + diffY * Math.floor(i / rowItemCount);
+			
+            tempShape = new StoreItem(tempX, tempY, width, height);
+			
+			cart.push(tempShape);
+		}
 	}
 	
 	function mouseDownListener(evt) {
@@ -109,8 +90,8 @@ function canvasApp() {
 		hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
 		for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
 		*/
-		for (i=0; i < numShapes; i++) {
-			if (shapes[i].hitTest(mouseX, mouseY)) {	
+		for (i=0; i < cart.length; i++) {
+			if (cart[i].hitTest(mouseX, mouseY)) {	
 				dragging = true;
 				//the following variable will be reset if this loop repeats with another successful hit:
 				dragIndex = i;
@@ -120,8 +101,8 @@ function canvasApp() {
 		if (dragging) {
 			window.addEventListener("mousemove", mouseMoveListener, false);
 			
-            //place currently dragged shape on top
-            shapes.splice(numShapes - 1, 0, shapes.splice(dragIndex, 1)[0]);
+			//place currently dragged shape on top
+			cart.push(cart.splice(dragIndex,1)[0]);
 			
 			//shapeto drag is now last one in array
 			dragHoldX = mouseX - shapes[numShapes-1].x;
@@ -135,8 +116,8 @@ function canvasApp() {
 			//start timer
 			timer = setInterval(onTimerTick, 1000/30);
         }
-        else if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
-            GoHome();
+        else  if (btnEat.mouseDownListener(mouseX, mouseY)) {
+            Eat();
         }
         else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
             CartLeft();
@@ -159,13 +140,13 @@ function canvasApp() {
 	
 	function onTimerTick() {
 		//because of reordering, the dragging shape is the last one in the array.
-		shapes[numShapes-1].x = shapes[numShapes-1].x + easeAmount*(targetX - shapes[numShapes-1].x);
-		shapes[numShapes-1].y = shapes[numShapes-1].y + easeAmount*(targetY - shapes[numShapes-1].y);
+		cart[cart.length-1].x = cart.length[cart.length-1].x + easeAmount*(targetX - cart[cart.length-1].x);
+		cart[cart.length-1].y = cart[cart.length-1].y + easeAmount*(targetY - cart[cart.length-1].y);
 		
 		//stop the timer when the target position is reached (close enough)
-		if ((!dragging)&&(Math.abs(shapes[numShapes-1].x - targetX) < 0.1) && (Math.abs(shapes[numShapes-1].y - targetY) < 0.1)) {
-			shapes[numShapes-1].x = targetX;
-			shapes[numShapes-1].y = targetY;
+		if ((!dragging)&&(Math.abs(cart[cart.length-1].x - targetX) < 0.1) && (Math.abs(cart[cart.length-1].y - targetY) < 0.1)) {
+			cart[cart.length-1].x = targetX;
+			cart[cart.length-1].y = targetY;
 			//stop timer:
 			clearInterval(timer);
 		}
@@ -179,15 +160,16 @@ function canvasApp() {
 			dragging = false;
 			window.removeEventListener("mousemove", mouseMoveListener, false);
 			getShapes();
-			targetX = shapes[numShapes - 1].origX;
-            targetY = shapes[numShapes - 1].origY;
+            getFood();
+			targetX = cart[cart.length - 1].origX;
+			targetY = cart[cart.length - 1].origY;
 		}
 	}
 
 	function mouseMoveListener(evt) {
 		var posX;
 		var posY;
-		var shapeRad = shapes[numShapes-1].radius;
+		var shapeRad = cart[cart.length-1].radius;
 		var minX = shapeRad;
 		var maxX = theCanvas.width - shapeRad;
 		var minY = shapeRad;
@@ -210,10 +192,10 @@ function canvasApp() {
 		
 	function drawShapes() {
 		var i;
-		for (i=0; i < numShapes; i++) {
+		for (i=0; i < cart.length; i++) {
 			//the drawing of the shape is handled by a function inside the external class.
 			//we must pass as an argument the context to which we are drawing the shape.
-			shapes[i].drawToContext(context);
+			cart[i].drawToContext(context);
 		}
 	}
 
@@ -228,40 +210,62 @@ function canvasApp() {
 		}
 	}
 	
+    function drawDish(){
+        var i;
+        var dishMaxItem = 4;
+        var max = Math.min(dishMaxItem, dish.length - dishMaxItem);
+        for (i = 0; i < max; i++){
+            dish[dishMaxItem + i].setX(i * 80 + 40);
+            dish[dishMaxItem + i].drawToContext(context);
+            
+        }
+    }
+    
 	function drawScreen() {
 		//bg
-		context.drawImage(img, 0, 0);
-		
         drawShapes();
         
-        btnGoHome.drawToContext(context);
+        btnEat.drawToContext(context);
         btnCartLeft.drawToContext(context);
         btnCartRight.drawToContext(context);
 
         if (cart != null) {
             drawCart();
         }
+        if(dish != null){
+            drawDish();
+        }
 
     }
     
     function getShapes() {
-		var i;
-        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
-            var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[numShapes - 1].foodData);
-			// need to copy values
-            temp.hunger = shapes[numShapes -1].hunger;
-            temp.grain = shapes[numShapes -1].grain;
-            temp.vegetable = shapes[numShapes -1].vegetable;
-            temp.meat = shapes[numShapes -1].meat;
-			temp.refreshProgressBar();
-			cart.push(temp);
-		}
-	}
-	
-    function GoHome() {
-        document.writeln("Go Home");
+        var i;
+        if(mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height){
+            var temp = new StoreItem(cart.length * 80, 370, 80, 80);
+            // need to copy values
+            temp.hunger = shapes[shapes.length -1].hunger;
+            temp.grain = shapes[shapes.length -1].grain;
+            temp.vegetable = shapes[shapes.length -1].vegetable;
+            temp.meat = shapes[shapes.length -1].meat;
+            temp.refreshProgressBar();
+            cart.push(temp);
+        }
     }
-
+        
+    function getFood(){
+        var i;
+        if(mouseX >= 0 && mouseY <= 350){
+            var temp = new StoreItem(dish.length * 80, 200, 80, 80);
+            
+            temp.hunger = cart[cart.length -1].hunger;
+            temp.grain = cart[cart.length -1].grain;
+            temp.vegetable = cart[cart.length -1].vegetable;
+            temp.meat = cart[cart.length -1].meat;
+            temp.refreshProgressBar();
+            dish.push(temp);
+        }
+    }
+    
     function CartLeft() {
 		if(currentPage > 0){
 			currentPage--;
@@ -271,10 +275,18 @@ function canvasApp() {
     }
 
     function CartRight() {
-        if (currentPage != Math.floor((cart.length - 1) / 4)) {
+		if(currentPage != (cart.length / 4)){
 			currentPage++;
 		}
 		drawScreen();
-       
-    }	
+    }
+    
+    function Eat(){
+        var i;
+        for(i = 0; i < dish.length; i++){
+            dish[i].style.display = "none";
+        }
+        drawScreen();
+        
+    }
 }
