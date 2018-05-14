@@ -28,15 +28,27 @@ function canvasApp() {
 	var cart = [];
 	var currentPage = 0;
 
-    var BUTTON_GO_HOME = 1;
-    var BUTTON_CART_LEFT = 2;
-    var BUTTON_CART_RIGHT = 3;
+    var BUTTON_GO_HOME;
+    var BUTTON_CART_LEFT;
+    var BUTTON_CART_RIGHT;
+	var BUTTON_NEXT;
+	var BUTTON_PREV;
 
     var btnGoHome;
 	
+	var curPage;
+	
+	
 	function init() {
-		numShapes = 6;
-		easeAmount = 0.45;
+        numShapes = 6;
+        curPage = 0;
+        easeAmount = 0.45;
+
+        BUTTON_GO_HOME = 1;
+        BUTTON_CART_LEFT = 2;
+        BUTTON_CART_RIGHT = 3;
+        BUTTON_NEXT = 4;
+        BUTTON_PREV = 5;
 		
 		shapes = [];
 		
@@ -45,15 +57,22 @@ function canvasApp() {
         // create buttons
         btnGoHome = new Button(300, 300, 100, 40, "GoHome", BUTTON_GO_HOME, null);
 
-        var CART_ARROW_BTN_WIDTH = 38;
-        var CART_ARROW_BTN_HEIGHT = 108;
-        var CART_ARROW_DIFF_X = 3;
+        var ARROW_BTN_WIDTH = 38;
+        var ARROW_BTN_HEIGHT = 108;
+        var ARROW_DIFF_X = 3;
         var CART_ARROW_Y = 430;
 
-        btnCartLeft = new Button(CART_ARROW_DIFF_X, CART_ARROW_Y - CART_ARROW_BTN_HEIGHT / 2,
-            CART_ARROW_BTN_WIDTH, CART_ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
-        btnCartRight = new Button(theCanvas.width - CART_ARROW_DIFF_X - CART_ARROW_BTN_WIDTH, CART_ARROW_Y - CART_ARROW_BTN_HEIGHT / 2,
-            CART_ARROW_BTN_WIDTH, CART_ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
+        btnCartLeft = new Button(ARROW_DIFF_X, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
+            ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
+        btnCartRight = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
+            ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
+
+        var SHOP_ARROW_Y = 100;
+			
+        btnPrev = new Button(ARROW_DIFF_X, SHOP_ARROW_Y,
+            ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_PREV, leftImg);
+        btnNext = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, SHOP_ARROW_Y,
+            ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_NEXT, rightImg);
 
         // draw
 		drawScreen();
@@ -85,9 +104,10 @@ function canvasApp() {
             }
         }
         else {
-            for (i = 0; i < 6; i++) {
-                var tempX = startX + diffX * (i % rowItemCount);
-                var tempY = startY + diffY * Math.floor(i / rowItemCount);
+            for (i = 0; i < 25; i++) {
+                var index = i % numShapes;
+                var tempX = startX + diffX * (index % rowItemCount);
+                var tempY = startY + diffY * Math.floor(index / rowItemCount);
 
                 tempShape = new StoreItem(tempX, tempY, width, height, null);
 
@@ -143,6 +163,12 @@ function canvasApp() {
         }
         else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
             CartRight();
+        }
+		else if (btnNext.mouseDownListener(mouseX, mouseY)) {
+            GoNext();
+        }
+		else if (btnPrev.mouseDownListener(mouseX, mouseY)) {
+            GoPrev();
         }
 		theCanvas.removeEventListener("mousedown", mouseDownListener, false);
 		window.addEventListener("mouseup", mouseUpListener, false);
@@ -209,11 +235,11 @@ function canvasApp() {
 	}
 		
 	function drawShapes() {
-		var i;
-		for (i=0; i < numShapes; i++) {
-			//the drawing of the shape is handled by a function inside the external class.
-			//we must pass as an argument the context to which we are drawing the shape.
-			shapes[i].drawToContext(context);
+        var i;
+        var startIndex = curPage * numShapes;
+        var max = Math.min(numShapes, shapes.length - startIndex);
+        for (i = 0; i < max; i++) {
+			shapes[i + curPage * numShapes].drawToContext(context);
 		}
 	}
 
@@ -237,6 +263,8 @@ function canvasApp() {
         btnGoHome.drawToContext(context);
         btnCartLeft.drawToContext(context);
         btnCartRight.drawToContext(context);
+		btnNext.drawToContext(context);
+		btnPrev.drawToContext(context);
 
         if (cart != null) {
             drawCart();
@@ -277,4 +305,18 @@ function canvasApp() {
 		drawScreen();
        
     }	
+
+    function GoPrev() {
+        if (curPage > 0) {
+            curPage--;
+        }
+        drawScreen();
+    }
+
+    function GoNext() {
+        if (curPage != Math.floor((shapes.length - 1) / numShapes)) {
+            curPage++;
+        }
+        drawScreen();
+    }
 }
