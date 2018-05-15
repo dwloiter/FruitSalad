@@ -11,13 +11,15 @@ $dbusername = "id5623156_fruit";
 $dbpassword = "salad";
 $dbname = "id5623156_login";
 
+
+
 // Create connection
 $conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
 // Check connection
 if ($conn->connect_error)
 {
     die("Connection failed: " . $conn->connect_error);
-} 
+}
 
 $sql = "SELECT name FROM user WHERE name = \"". $username. "\"";
 $result = $conn->query($sql);
@@ -37,7 +39,11 @@ else {
 	}
 	else
 	{
-        header("Location: ../html/index.html");
+    $sql = "INSERT INTO `user`(`email`, `name`, `password`)
+          VALUES (\"" . $email . "\", \"" . $username . "\", \"" . $password . "\")";
+    $result = $conn->query($sql);
+
+        header("Location: ../html/login.html");
 	}
 }
 

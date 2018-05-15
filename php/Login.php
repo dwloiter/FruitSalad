@@ -10,6 +10,8 @@ $dbusername = "id5623156_fruit";
 $dbpassword = "salad";
 $dbname = "id5623156_login";
 
+$_SESSION["username"] = $username;
+
 // Create connection
 $conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
 // Check connection
