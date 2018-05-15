@@ -33,10 +33,13 @@ function canvasApp() {
     var BUTTON_CART_RIGHT;
 	var BUTTON_NEXT;
 	var BUTTON_PREV;
+    var BUTTON_INFO;
 
     var btnGoHome;
 	
 	var curPage;
+    
+    var showInfo;
 	
 	
 	function init() {
@@ -49,6 +52,9 @@ function canvasApp() {
         BUTTON_CART_RIGHT = 3;
         BUTTON_NEXT = 4;
         BUTTON_PREV = 5;
+        BUTTON_INFO = 6;
+        
+        showInfo = false;
 		
 		shapes = [];
 		
@@ -73,6 +79,12 @@ function canvasApp() {
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_PREV, leftImg);
         btnNext = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, SHOP_ARROW_Y,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_NEXT, rightImg);
+        
+        var INFO_BTN_WIDTH = 40;
+        var INFO_BTN_HEIGHT = 40;
+        
+        btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0,
+                            INFO_BTN_WIDTH, INFO_BTN_HEIGHT, "!", BUTTON_INFO, null);
 
         // draw
 		drawScreen();
@@ -137,7 +149,10 @@ function canvasApp() {
 			}
 		}
 		
-		if (dragging) {
+        if (btnInfo.mouseDownListener(mouseX, mouseY)){
+            ToggleInfo();
+        }
+		else if (dragging) {
 			window.addEventListener("mousemove", mouseMoveListener, false);
 			
             //place currently dragged shape on top
@@ -254,6 +269,15 @@ function canvasApp() {
 		}
 	}
 	
+    function drawInfo() {
+        context.fillStyle = "#000000";
+        context.textAlign = "left";
+        context.fillText("dummy text file", 30, 10);    
+        context.fillText("change", 30, 30);    
+        context.fillText("this", 30, 50);    
+        context.fillText("dummy text", 30, 70);    
+    }
+    
 	function drawScreen() {
 		//bg
 		context.drawImage(img, 0, 0);
@@ -265,11 +289,15 @@ function canvasApp() {
         btnCartRight.drawToContext(context);
 		btnNext.drawToContext(context);
 		btnPrev.drawToContext(context);
+        btnInfo.drawToContext(context);
 
         if (cart != null) {
             drawCart();
         }
 
+        if (showInfo) {
+            drawInfo();
+        }
     }
     
     function getShapes() {
@@ -316,6 +344,26 @@ function canvasApp() {
     function GoNext() {
         if (curPage != Math.floor((shapes.length - 1) / numShapes)) {
             curPage++;
+        }
+        drawScreen();
+    }
+    
+    function ToggleInfo(){
+        showInfo = !showInfo;
+        if (!showInfo) {
+            var INFO_BTN_WIDTH = 40;
+            var INFO_BTN_HEIGHT = 40;
+            
+            btnInfo.x = theCanvas.width - INFO_BTN_WIDTH;
+            btnInfo.width = INFO_BTN_WIDTH;
+            btnInfo.height = INFO_BTN_HEIGHT;
+            btnInfo.message = "i";
+        }
+        else {
+            btnInfo.x = 0;
+            btnInfo.width = theCanvas.width;
+            btnInfo.height = theCanvas.height;
+            btnInfo.message = "";
         }
         drawScreen();
     }
