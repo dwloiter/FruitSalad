@@ -38,14 +38,17 @@ function canvasApp() {
     var btnGoHome;
 	
 	var curPage;
-    
-    var showInfo;
-	
+
+	var budget;
+	var totalPrice;
+
 	
 	function init() {
         numShapes = 6;
         curPage = 0;
-        easeAmount = 0.45;
+        easeAmount = 0.450;
+		budget = 200;
+		totalPrice = 0;
 
         BUTTON_GO_HOME = 1;
         BUTTON_CART_LEFT = 2;
@@ -269,6 +272,16 @@ function canvasApp() {
 		}
 	}
 	
+
+	function drawTotal() {		
+		context.fillText("totalPrice:" + totalPrice, 200, 10)
+		context.fillText("budget:" + budget, 200, 20)
+    }
+    
+
+	
+	
+
     function drawInfo() {
         context.fillStyle = "#000000";
         context.textAlign = "left";
@@ -278,6 +291,7 @@ function canvasApp() {
         context.fillText("dummy text", 30, 70);    
     }
     
+
 	function drawScreen() {
 		//bg
 		context.drawImage(img, 0, 0);
@@ -294,6 +308,8 @@ function canvasApp() {
         if (cart != null) {
             drawCart();
         }
+		
+		drawTotal();
 
         if (showInfo) {
             drawInfo();
@@ -302,7 +318,14 @@ function canvasApp() {
     
     function getShapes() {
 		var i;
-        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
+		var price;
+		if (shapes[numShapes-1].foodData == null){
+			price = 20;
+		}
+		else{
+			price = shapes[numShapes -1].foodData.Price;
+		}
+        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height && budget >= totalPrice + price) {
             var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[numShapes - 1].foodData);
 			// need to copy values
             temp.hunger = shapes[numShapes -1].hunger;
@@ -310,7 +333,9 @@ function canvasApp() {
             temp.vegetable = shapes[numShapes -1].vegetable;
             temp.meat = shapes[numShapes -1].meat;
 			temp.refreshProgressBar();
+			totalPrice += price;
 			cart.push(temp);
+			
 		}
 	}
 	
