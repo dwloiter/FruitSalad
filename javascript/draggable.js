@@ -42,13 +42,25 @@ function canvasApp() {
 	var budget;
 	var totalPrice;
 
+    var cartMaxItem;
+    var cartStartIndex;
+    var cartDragIndex;
+    var cartDragging;
+
 	
 	function init() {
         numShapes = 6;
         curPage = 0;
         easeAmount = 0.450;
 		budget = 200;
-		totalPrice = 0;
+        totalPrice = 0;
+        dragIndex = -1;
+
+        cartStartIndex = 0;
+        numCartItems = 4;
+        cartMaxItem = 0;
+        cartDragging = false;
+        cartDragIndex = -1;
 
         BUTTON_GO_HOME = 1;
         BUTTON_CART_LEFT = 2;
@@ -150,7 +162,15 @@ function canvasApp() {
 				//the following variable will be reset if this loop repeats with another successful hit:
 				dragIndex = i;
 			}
-		}
+        }
+
+        for (i = 0; i < cart.length; i++) {
+            if (cart[i].hitTest(mouseX, mouseY)) {
+                cartDragging = true;
+                //the following variable will be reset if this loop repeats with another successful hit:
+                cartDragIndex = i;
+            }
+        }
 		
         if (btnInfo.mouseDownListener(mouseX, mouseY)){
             ToggleInfo();
@@ -172,6 +192,21 @@ function canvasApp() {
 			
 			//start timer
 			timer = setInterval(onTimerTick, 1000/30);
+        }
+        else if (cartDragging) {
+            window.addEventListener("mousemove", mouseMoveListener, false);
+
+            //shapeto drag is now last one in array
+            dragHoldX = mouseX - cart[cartDragIndex].x;
+            dragHoldY = mouseY - cart[cartDragIndex].y;
+
+            //The "target" position is where the object should be if it were to move there instantaneously. But we will
+            //set up the code so that this target position is approached gradually, producing a smooth motion.
+            targetX = mouseX - dragHoldX;
+            targetY = mouseY - dragHoldY;
+
+            //start timer
+            timer = setInterval(onTimerTick, 1000 / 30);
         }
         else if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
             GoHome();
@@ -201,18 +236,39 @@ function canvasApp() {
 		return false;
 	}
 	
-	function onTimerTick() {
-		//because of reordering, the dragging shape is the last one in the array.
-		shapes[numShapes-1].x = shapes[numShapes-1].x + easeAmount*(targetX - shapes[numShapes-1].x);
-		shapes[numShapes-1].y = shapes[numShapes-1].y + easeAmount*(targetY - shapes[numShapes-1].y);
-		
-		//stop the timer when the target position is reached (close enough)
-		if ((!dragging)&&(Math.abs(shapes[numShapes-1].x - targetX) < 0.1) && (Math.abs(shapes[numShapes-1].y - targetY) < 0.1)) {
-			shapes[numShapes-1].x = targetX;
-			shapes[numShapes-1].y = targetY;
-			//stop timer:
-			clearInterval(timer);
-		}
+    function onTimerTick() {
+        if (dragIndex != -1) {
+            //because of reordering, the dragging shape is the last one in the array.
+            shapes[numShapes - 1].x = shapes[numShapes - 1].x + easeAmount * (targetX - shapes[numShapes - 1].x);
+            shapes[numShapes - 1].y = shapes[numShapes - 1].y + easeAmount * (targetY - shapes[numShapes - 1].y);
+
+            //stop the timer when the target position is reached (close enough)
+            if ((!dragging) && (Math.abs(shapes[numShapes - 1].x - targetX) < 0.1) && (Math.abs(shapes[numShapes - 1].y - targetY) < 0.1)) {
+                shapes[numShapes - 1].x = targetX;
+                shapes[numShapes - 1].y = targetY;
+                //stop timer:
+                clearInterval(timer);
+
+                dragIndex = -1;
+            }
+        }
+
+        if (cartDragIndex != -1) {
+            //because of reordering, the dragging shape is the last one in the array.
+            cart[cartDragIndex].x = cart[cartDragIndex].x + easeAmount * (targetX - cart[cartDragIndex].x);
+            cart[cartDragIndex].y = cart[cartDragIndex].y + easeAmount * (targetY - cart[cartDragIndex].y);
+
+            //stop the timer when the target position is reached (close enough)
+            if ((!cartDragging) && (Math.abs(cart[cartDragIndex].x - targetX) < 0.1) && (Math.abs(cart[cartDragIndex].y - targetY) < 0.1)) {
+                cart[cartDragIndex].x = targetX;
+                cart[cartDragIndex].y = targetY;
+                //stop timer:
+                clearInterval(timer);
+
+                cartDragIndex = -1;
+            }
+        }
+
 		drawScreen();
 	}
 	
@@ -225,7 +281,19 @@ function canvasApp() {
 			getShapes();
 			targetX = shapes[numShapes - 1].origX;
             targetY = shapes[numShapes - 1].origY;
-		}
+        }
+
+        if (cartDragging) {
+            cartDragging = false;
+            window.removeEventListener("mousemove", mouseMoveListener, false);
+            if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
+                targetX = cart[cartDragIndex].origX;
+                targetY = cart[cartDragIndex].origY;
+            }
+            else {
+                removeFromCart();
+            }
+        }
 	}
 
 	function mouseMoveListener(evt) {
@@ -263,13 +331,18 @@ function canvasApp() {
 
     function drawCart() {
 		var i;
-        var cartMaxItem = 4;
-		var startIndex = currentPage * cartMaxItem;
-		var max = Math.min(cartMaxItem, cart.length - startIndex);
-		for (i = 0; i < max; ++i){
-			cart[startIndex + i].setX(i * 80 + 40);
-			cart[startIndex + i].drawToContext(context);
-		}
+        var max = Math.min(cartMaxItem, cart.length - cartStartIndex);
+        for (i = 0; i < cartMaxItem; ++i){
+            if (i == cartDragIndex && cartDragging) {
+                continue;
+            }
+            cart[cartStartIndex + i].setX(i * 80 + 40);
+            cart[cartStartIndex + i].drawToContext(context);
+        }
+
+        if (cartDragging) {
+            cart[cartDragIndex].drawToContext(context);
+        }
 	}
 	
 
@@ -278,10 +351,6 @@ function canvasApp() {
 		context.fillText("budget:" + budget, 200, 20)
     }
     
-
-	
-	
-
     function drawInfo() {
         context.fillStyle = "#000000";
         context.textAlign = "left";
@@ -290,7 +359,6 @@ function canvasApp() {
         context.fillText("this", 30, 50);    
         context.fillText("dummy text", 30, 70);    
     }
-    
 
 	function drawScreen() {
 		//bg
@@ -334,10 +402,16 @@ function canvasApp() {
             temp.meat = shapes[numShapes -1].meat;
 			temp.refreshProgressBar();
 			totalPrice += price;
-			cart.push(temp);
-			
+            cart.push(temp);
+            cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 		}
-	}
+    }
+
+    function removeFromCart() {
+        cart.splice(cartDragIndex, 1);
+        cartDragIndex = -1;
+        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+    }
 	
     function GoHome() {
         document.writeln("Go Home");
@@ -347,16 +421,22 @@ function canvasApp() {
 		if(currentPage > 0){
 			currentPage--;
 		}
-		drawScreen();
 
+        cartStartIndex = currentPage * numCartItems;
+        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+
+        drawScreen();
     }
 
     function CartRight() {
-        if (currentPage != Math.floor((cart.length - 1) / 4)) {
+        if (currentPage != Math.floor((cart.length - 1) / numCartItems)) {
 			currentPage++;
 		}
+
+        cartStartIndex = currentPage * numCartItems;
+        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+
 		drawScreen();
-       
     }	
 
     function GoPrev() {
