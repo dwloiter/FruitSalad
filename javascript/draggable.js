@@ -426,6 +426,16 @@ function canvasApp() {
     }
 
     function removeFromCart() {
+        var price;
+        if (cart[cartDragIndex].foodData == null) {
+            price = 20;
+        }
+        else {
+            price = cart[cartDragIndex].foodData.Price;
+        }
+
+        totalPrice -= price;
+
         cart.splice(cartDragIndex, 1);
         cartDragIndex = -1;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
