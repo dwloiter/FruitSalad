@@ -47,6 +47,13 @@ function canvasApp() {
     var cartDragIndex;
     var cartDragging;
 
+    var cartDragHoldX;
+    var cartDragHoldY;
+    var timer;
+    var cartTargetX;
+    var cartTargetY;
+
+
 	
 	function init() {
         numShapes = 6;
@@ -156,19 +163,22 @@ function canvasApp() {
 		hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
 		for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
 		*/
-		for (i=0; i < numShapes; i++) {
+		for (i = 0; i < numShapes; i++) {
 			if (shapes[i].hitTest(mouseX, mouseY)) {	
 				dragging = true;
 				//the following variable will be reset if this loop repeats with another successful hit:
-				dragIndex = i;
+                dragIndex = i;
+                break;
 			}
         }
 
-        for (i = 0; i < cart.length; i++) {
-            if (cart[i].hitTest(mouseX, mouseY)) {
+        var max = Math.min(cartMaxItem, cart.length - cartStartIndex);
+        for (i = 0; i < cartMaxItem; ++i) {
+            if (cart[i + cartStartIndex].hitTest(mouseX, mouseY)) {
                 cartDragging = true;
                 //the following variable will be reset if this loop repeats with another successful hit:
-                cartDragIndex = i;
+                cartDragIndex = i + cartStartIndex;
+                break;
             }
         }
 		
@@ -197,13 +207,13 @@ function canvasApp() {
             window.addEventListener("mousemove", mouseMoveListener, false);
 
             //shapeto drag is now last one in array
-            dragHoldX = mouseX - cart[cartDragIndex].x;
-            dragHoldY = mouseY - cart[cartDragIndex].y;
+            cartDragHoldX = mouseX - cart[cartDragIndex].x;
+            cartDragHoldY = mouseY - cart[cartDragIndex].y;
 
             //The "target" position is where the object should be if it were to move there instantaneously. But we will
             //set up the code so that this target position is approached gradually, producing a smooth motion.
-            targetX = mouseX - dragHoldX;
-            targetY = mouseY - dragHoldY;
+            cartTargetX = mouseX - cartDragHoldX;
+            cartTargetY = mouseY - cartDragHoldY;
 
             //start timer
             timer = setInterval(onTimerTick, 1000 / 30);
@@ -255,13 +265,13 @@ function canvasApp() {
 
         if (cartDragIndex != -1) {
             //because of reordering, the dragging shape is the last one in the array.
-            cart[cartDragIndex].x = cart[cartDragIndex].x + easeAmount * (targetX - cart[cartDragIndex].x);
-            cart[cartDragIndex].y = cart[cartDragIndex].y + easeAmount * (targetY - cart[cartDragIndex].y);
+            cart[cartDragIndex].x = cart[cartDragIndex].x + easeAmount * (cartTargetX - cart[cartDragIndex].x);
+            cart[cartDragIndex].y = cart[cartDragIndex].y + easeAmount * (cartTargetY - cart[cartDragIndex].y);
 
             //stop the timer when the target position is reached (close enough)
-            if ((!cartDragging) && (Math.abs(cart[cartDragIndex].x - targetX) < 0.1) && (Math.abs(cart[cartDragIndex].y - targetY) < 0.1)) {
-                cart[cartDragIndex].x = targetX;
-                cart[cartDragIndex].y = targetY;
+            if ((!cartDragging) && (Math.abs(cart[cartDragIndex].x - cartTargetX) < 0.1) && (Math.abs(cart[cartDragIndex].y - cartTargetY) < 0.1)) {
+                cart[cartDragIndex].x = cartTargetX;
+                cart[cartDragIndex].y = cartTargetY;
                 //stop timer:
                 clearInterval(timer);
 
@@ -287,8 +297,8 @@ function canvasApp() {
             cartDragging = false;
             window.removeEventListener("mousemove", mouseMoveListener, false);
             if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
-                targetX = cart[cartDragIndex].origX;
-                targetY = cart[cartDragIndex].origY;
+                cartTargetX = cart[cartDragIndex].origX;
+                cartTargetY = cart[cartDragIndex].origY;
             }
             else {
                 removeFromCart();
@@ -317,7 +327,15 @@ function canvasApp() {
 		posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
 		
 		targetX = posX;
-		targetY = posY;
+        targetY = posY;
+
+        posX = mouseX - cartDragHoldX;
+        posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
+        posY = mouseY - cartDragHoldY;
+        posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
+
+        cartTargetX = posX;
+        cartTargetY = posY;
 	}
 		
 	function drawShapes() {
@@ -332,8 +350,8 @@ function canvasApp() {
     function drawCart() {
 		var i;
         var max = Math.min(cartMaxItem, cart.length - cartStartIndex);
-        for (i = 0; i < cartMaxItem; ++i){
-            if (i == cartDragIndex && cartDragging) {
+        for (i = 0; i < cartMaxItem; ++i) {
+            if (cartStartIndex + i == cartDragIndex && cartDragging) {
                 continue;
             }
             cart[cartStartIndex + i].setX(i * 80 + 40);

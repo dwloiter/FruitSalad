@@ -74,6 +74,7 @@ StoreItem.prototype.refreshProgressBar = function() {
 StoreItem.prototype.setX = function(x) {
     var diff = x - this.x;
     this.x = x;
+    this.origX = x;
     this.hungerProgressBar.x = this.x + diffX;
     this.meatProgressBar.x = this.x + diffX;
     this.grainProgressBar.x = this.x + diffX;
