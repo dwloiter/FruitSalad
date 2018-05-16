@@ -55,13 +55,13 @@ function StoreItem(posX, posY, width, height, foodData) {
     var progressCurY = this.y + this.height;
     var max = 100;
 
-    this.hungerProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.hunger, max);
+    this.hungerProgressBar = new ProgressBar1(progressX, progressCurY, progressWidth, progressHeight, this.hunger, max);
     progressCurY += diffY;
-    this.meatProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.meat, max);
+    this.meatProgressBar = new ProgressBar2(progressX, progressCurY, progressWidth, progressHeight, this.meat, max);
     progressCurY += diffY;
-    this.grainProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.grain, max);
+    this.grainProgressBar = new ProgressBar3(progressX, progressCurY, progressWidth, progressHeight, this.grain, max);
     progressCurY += diffY;
-    this.vegetableProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.vegetable, max);
+    this.vegetableProgressBar = new ProgressBar4(progressX, progressCurY, progressWidth, progressHeight, this.vegetable, max);
 }
 
 StoreItem.prototype.refreshProgressBar = function() {
