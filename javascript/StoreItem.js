@@ -96,16 +96,15 @@ StoreItem.prototype.hitTest = function (hitX, hitY) {
 //A function for drawing the particle.
 StoreItem.prototype.drawToContext = function (theContext) {
 
+    this.hungerProgressBar.drawToContext(theContext);
+    this.meatProgressBar.drawToContext(theContext);
+    this.grainProgressBar.drawToContext(theContext);
+    this.vegetableProgressBar.drawToContext(theContext);
+
     if (this.name == null) {
         theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
     }
     else {
         theContext.drawImage(foodImages.get(this.name), this.x, this.y, this.width, this.height);
     }
-
-    this.hungerProgressBar.drawToContext(theContext);
-    this.meatProgressBar.drawToContext(theContext);
-    this.grainProgressBar.drawToContext(theContext);
-    this.vegetableProgressBar.drawToContext(theContext);
-
 }
