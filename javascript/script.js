@@ -9,7 +9,7 @@ var context = canvas.getContext('2d');
 var gameStart = false;
 
 var img = new Image();  
-img.src = '../images/shelf.jpg'; 
+img.src = '../images/UI/shelf.jpg'; 
 
 var foodDatas;
 

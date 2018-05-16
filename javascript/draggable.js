@@ -2,9 +2,16 @@
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
 var leftImg = new Image();
-leftImg.src = '../images/left.png';
+leftImg.src = '../images/UI/left.png';
 var rightImg = new Image();
-rightImg.src = '../images/right.png'; 
+rightImg.src = '../images/UI/right.png'; 
+var homeButton = new Image();
+homeButton.src = '../images/UI/home_button.png'; 
+
+var informationButton = new Image();
+informationButton.src = "../images/UI/information_button.png";
+var informationScreen = new Image();
+informationScreen.src = "../images/UI/information.png";
 
 function canvasApp() {
 	
@@ -83,14 +90,17 @@ function canvasApp() {
         makeShapes();
 
         // create buttons
-        btnGoHome = new Button(300, 300, 100, 40, "GoHome", BUTTON_GO_HOME, null);
+        
+        btnGoHome = new Button(theCanvas.width - 73, 305,
+            67, 32, null, BUTTON_GO_HOME, homeButton);
+
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
         var ARROW_DIFF_X = 3;
         var CART_ARROW_Y = 430;
 
-        btnCartLeft = new Button(ARROW_DIFF_X, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
+        btnCartLeft = new Button(ARROW_DIFF_X, CART_ARROW_Y - ARROW_BTN_HEIGHT/ 2,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
         btnCartRight = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
@@ -105,9 +115,9 @@ function canvasApp() {
         var INFO_BTN_WIDTH = 40;
         var INFO_BTN_HEIGHT = 40;
         
-        btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0,
-                            INFO_BTN_WIDTH, INFO_BTN_HEIGHT, "!", BUTTON_INFO, null);
-
+        btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0, INFO_BTN_WIDTH, INFO_BTN_HEIGHT, null, BUTTON_INFO, informationButton);
+        
+        
         // draw
 		drawScreen();
 		
@@ -372,10 +382,7 @@ function canvasApp() {
     function drawInfo() {
         context.fillStyle = "#000000";
         context.textAlign = "left";
-        context.fillText("dummy text file", 30, 10);    
-        context.fillText("change", 30, 30);    
-        context.fillText("this", 30, 50);    
-        context.fillText("dummy text", 30, 70);    
+        context.drawImage(informationScreen, 0, 0);  
     }
 
 	function drawScreen() {

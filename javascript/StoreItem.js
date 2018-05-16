@@ -1,6 +1,6 @@
 // Simple class example
 var fruit_apple = new Image();  
-fruit_apple.src = '../images/apple.png';
+fruit_apple.src = '../images/Food/apple.png';
 var diffX = 10;
 
 function StoreItem(posX, posY, width, height, foodData) {

@@ -2,9 +2,9 @@
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
 var leftImg = new Image();
-leftImg.src = '../images/left.png';
+leftImg.src = '../images/UI/left.png';
 var rightImg = new Image();
-rightImg.src = '../images/right.png'; 
+rightImg.src = '../images/UI/right.png'; 
 
 function canvasApp() {
 	
