@@ -1,6 +1,11 @@
 //JavaScript HTML5 Canvas example by Dan Gries, rectangleworld.com.
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
+var leftImg = new Image();
+leftImg.src = '../images/UI/left.png';
+var rightImg = new Image();
+rightImg.src = '../images/UI/right.png'; 
+
 function home(cart) {
 	
 	var theCanvas = document.getElementById("gameCanvas");

@@ -1,6 +1,7 @@
 // Simple class example
 var fruit_apple = new Image();  
-fruit_apple.src = '../images/apple.png';
+fruit_apple.src = '../images/Food/apple.png';
+var diffX = 10;
 
 function StoreItem(posX, posY, width, height, foodData) {
     // position
@@ -50,7 +51,7 @@ function StoreItem(posX, posY, width, height, foodData) {
     var progressWidth = this.width - 20;
     var progressHeight = 5;
     var diffY = 8;
-    var progressX = 10 + this.x;
+    var progressX = diffX + this.x;
     var progressCurY = this.y + this.height;
     var max = 100;
 
@@ -73,10 +74,11 @@ StoreItem.prototype.refreshProgressBar = function() {
 StoreItem.prototype.setX = function(x) {
     var diff = x - this.x;
     this.x = x;
-    this.hungerProgressBar.x += diff;
-    this.meatProgressBar.x += diff;
-    this.grainProgressBar.x += diff;
-    this.vegetableProgressBar.x += diff;
+    this.origX = x;
+    this.hungerProgressBar.x = this.x + diffX;
+    this.meatProgressBar.x = this.x + diffX;
+    this.grainProgressBar.x = this.x + diffX;
+    this.vegetableProgressBar.x = this.x + diffX;
 }
 
 StoreItem.prototype.setY = function (y) {

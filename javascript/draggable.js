@@ -2,9 +2,16 @@
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
 var leftImg = new Image();
-leftImg.src = '../images/left.png';
+leftImg.src = '../images/UI/left.png';
 var rightImg = new Image();
-rightImg.src = '../images/right.png'; 
+rightImg.src = '../images/UI/right.png'; 
+var homeButton = new Image();
+homeButton.src = '../images/UI/home_button.png'; 
+
+var informationButton = new Image();
+informationButton.src = "../images/UI/information_button.png";
+var informationScreen = new Image();
+informationScreen.src = "../images/UI/information.png";
 
 function canvasApp() {
 	
@@ -42,6 +49,18 @@ function canvasApp() {
 	var budget;
 	var totalPrice;
 
+    var cartMaxItem;
+    var cartStartIndex;
+    var cartDragIndex;
+    var cartDragging;
+
+    var cartDragHoldX;
+    var cartDragHoldY;
+    var timer;
+    var cartTargetX;
+    var cartTargetY;
+
+
 	
 	function init() {
         numShapes = 6;
@@ -49,6 +68,14 @@ function canvasApp() {
         easeAmount = 0.450;
 		budget = 200;
         totalPrice = 0;
+
+        dragIndex = -1;
+
+        cartStartIndex = 0;
+        numCartItems = 4;
+        cartMaxItem = 0;
+        cartDragging = false;
+        cartDragIndex = -1;
 
         currentPage = 0;
 
@@ -66,7 +93,8 @@ function canvasApp() {
         makeShapes();
 
         // create buttons
-        btnGoHome = new Button(300, 300, 100, 40, "GoHome", BUTTON_GO_HOME, null);
+        btnGoHome = new Button(theCanvas.width - 73, 305,
+            67, 32, null, BUTTON_GO_HOME, homeButton);
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
@@ -88,9 +116,8 @@ function canvasApp() {
         var INFO_BTN_WIDTH = 40;
         var INFO_BTN_HEIGHT = 40;
         
-        btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0,
-                            INFO_BTN_WIDTH, INFO_BTN_HEIGHT, "!", BUTTON_INFO, null);
-
+        btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0, INFO_BTN_WIDTH, INFO_BTN_HEIGHT, null, BUTTON_INFO, informationButton);
+        
         // draw
 		drawScreen();
 		
@@ -156,6 +183,16 @@ function canvasApp() {
                 break;
 			}
 		}
+
+        max = Math.min(cartMaxItem, cart.length - cartStartIndex);
+        for (i = 0; i < cartMaxItem; ++i) {
+            if (cart[i + cartStartIndex].hitTest(mouseX, mouseY)) {
+                cartDragging = true;
+                //the following variable will be reset if this loop repeats with another successful hit:
+                cartDragIndex = i + cartStartIndex;
+                break;
+            }
+        }
 		
         if (btnInfo.mouseDownListener(mouseX, mouseY)){
             ToggleInfo();
@@ -174,6 +211,21 @@ function canvasApp() {
 			
 			//start timer
 			timer = setInterval(onTimerTick, 1000/30);
+        }
+        else if (cartDragging) {
+            window.addEventListener("mousemove", mouseMoveListener, false);
+
+            //shapeto drag is now last one in array
+            cartDragHoldX = mouseX - cart[cartDragIndex].x;
+            cartDragHoldY = mouseY - cart[cartDragIndex].y;
+
+            //The "target" position is where the object should be if it were to move there instantaneously. But we will
+            //set up the code so that this target position is approached gradually, producing a smooth motion.
+            cartTargetX = mouseX - cartDragHoldX;
+            cartTargetY = mouseY - cartDragHoldY;
+
+            //start timer
+            timer = setInterval(onTimerTick, 1000 / 30);
         }
         else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
             CartLeft();
@@ -204,19 +256,39 @@ function canvasApp() {
 		return false;
 	}
 	
-	function onTimerTick() {
-		//because of reordering, the dragging shape is the last one in the array.
-		shapes[dragIndex].x = shapes[dragIndex].x + easeAmount*(targetX - shapes[dragIndex].x);
-		shapes[dragIndex].y = shapes[dragIndex].y + easeAmount*(targetY - shapes[dragIndex].y);
-		
-		//stop the timer when the target position is reached (close enough)
-		if ((!dragging)&&(Math.abs(shapes[dragIndex].x - targetX) < 0.1) && (Math.abs(shapes[dragIndex].y - targetY) < 0.1)) {
-			shapes[dragIndex].x = targetX;
-			shapes[dragIndex].y = targetY;
-			//stop timer:
-            clearInterval(timer);
-            dragIndex = -1;
-		}
+    function onTimerTick() {
+        if (dragIndex != -1) {
+            //because of reordering, the dragging shape is the last one in the array.
+            shapes[dragIndex].x = shapes[dragIndex].x + easeAmount * (targetX - shapes[dragIndex].x);
+            shapes[dragIndex].y = shapes[dragIndex].y + easeAmount * (targetY - shapes[dragIndex].y);
+
+            //stop the timer when the target position is reached (close enough)
+            if ((!dragging) && (Math.abs(shapes[dragIndex].x - targetX) < 0.1) && (Math.abs(shapes[dragIndex].y - targetY) < 0.1)) {
+                shapes[dragIndex].x = targetX;
+                shapes[dragIndex].y = targetY;
+                //stop timer:
+                clearInterval(timer);
+
+                dragIndex = -1;
+            }
+        }
+
+        if (cartDragIndex != -1) {
+            //because of reordering, the dragging shape is the last one in the array.
+            cart[cartDragIndex].x = cart[cartDragIndex].x + easeAmount * (cartTargetX - cart[cartDragIndex].x);
+            cart[cartDragIndex].y = cart[cartDragIndex].y + easeAmount * (cartTargetY - cart[cartDragIndex].y);
+
+            //stop the timer when the target position is reached (close enough)
+            if ((!cartDragging) && (Math.abs(cart[cartDragIndex].x - cartTargetX) < 0.1) && (Math.abs(cart[cartDragIndex].y - cartTargetY) < 0.1)) {
+                cart[cartDragIndex].x = cartTargetX;
+                cart[cartDragIndex].y = cartTargetY;
+                //stop timer:
+                clearInterval(timer);
+
+                cartDragIndex = -1;
+            }
+        }
+
 		drawScreen();
 	}
 	
@@ -229,7 +301,19 @@ function canvasApp() {
 			getShapes();
 			targetX = shapes[dragIndex].origX;
             targetY = shapes[dragIndex].origY;
-		}
+        }
+
+        if (cartDragging) {
+            cartDragging = false;
+            window.removeEventListener("mousemove", mouseMoveListener, false);
+            if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
+                cartTargetX = cart[cartDragIndex].origX;
+                cartTargetY = cart[cartDragIndex].origY;
+            }
+            else {
+                removeFromCart();
+            }
+        }
 	}
 
 	function mouseMoveListener(evt) {
@@ -252,7 +336,15 @@ function canvasApp() {
 		posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
 		
 		targetX = posX;
-		targetY = posY;
+        targetY = posY;
+
+        posX = mouseX - cartDragHoldX;
+        posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
+        posY = mouseY - cartDragHoldY;
+        posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
+
+        cartTargetX = posX;
+        cartTargetY = posY;
 	}
 		
 	function drawShapes() {
@@ -273,29 +365,31 @@ function canvasApp() {
 
     function drawCart() {
 		var i;
-        var cartMaxItem = 4;
-		var startIndex = currentPage * cartMaxItem;
-		var max = Math.min(cartMaxItem, cart.length - startIndex);
-		for (i = 0; i < max; ++i){
-			cart[startIndex + i].setX(i * 80 + 40);
-			cart[startIndex + i].drawToContext(context);
-		}
-	}
+        var max = Math.min(cartMaxItem, cart.length - cartStartIndex);
+        for (i = 0; i < cartMaxItem; ++i) {
+            if (cartStartIndex + i == cartDragIndex && cartDragging) {
+                continue;
+            }
+            cart[cartStartIndex + i].setX(i * 80 + 40);
+            cart[cartStartIndex + i].drawToContext(context);
+        }
 
+        if (cartDragging) {
+            cart[cartDragIndex].drawToContext(context);
+        }
+	}
+	
 	function drawTotal() {		
 		context.fillText("totalPrice:" + totalPrice, 200, 10)
 		context.fillText("budget:" + budget, 200, 20)
     }
-
+    
     function drawInfo() {
         context.fillStyle = "#000000";
         context.textAlign = "left";
-        context.fillText("dummy text file", 30, 10);    
-        context.fillText("change", 30, 30);    
-        context.fillText("this", 30, 50);    
-        context.fillText("dummy text", 30, 70);    
+        context.drawImage(informationScreen, 0, 0);  
     }
-    
+
 	function drawScreen() {
 		//bg
 		context.drawImage(img, 0, 0);
@@ -339,32 +433,56 @@ function canvasApp() {
             temp.meat = shapes[dragIndex].meat;
 			temp.refreshProgressBar();
 			totalPrice += price;
-			cart.push(temp);
+            cart.push(temp);
+            cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 		}
-	}
+    }
+
+    function removeFromCart() {
+        var price;
+        if (cart[cartDragIndex].foodData == null) {
+            price = 20;
+        }
+        else {
+            price = cart[cartDragIndex].foodData.Price;
+        }
+
+        totalPrice -= price;
+
+        cart.splice(cartDragIndex, 1);
+        cartDragIndex = -1;
+        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+    }
 	
     function GoHome() {
         window.removeEventListener("mousedown", mouseDownListener, false);
         window.removeEventListener("mouseup", mouseUpListener, false);
         window.removeEventListener("mousemove", mouseMoveListener, false);
         home(cart);
-		
     }
 
     function CartLeft() {
 		if(currentPage > 0){
 			currentPage--;
 		}
-		drawScreen();
+
+        cartStartIndex = currentPage * numCartItems;
+        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+
+        drawScreen();
     }
 
     function CartRight() {
-        if (currentPage != Math.floor((cart.length - 1) / 4)) {
+        if (currentPage != Math.floor((cart.length - 1) / numCartItems)) {
 			currentPage++;
 		}
+
+        cartStartIndex = currentPage * numCartItems;
+        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+
 		drawScreen();
-       
     }	
+  
 
     function GoPrev() {
         if (curPage > 0) {
