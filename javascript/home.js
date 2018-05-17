@@ -6,12 +6,36 @@ leftImg.src = '../images/UI/left.png';
 var rightImg = new Image();
 rightImg.src = '../images/UI/right.png'; 
 
+var day1Image = new Image();
+day1Image.src = '../images/UI/day_1.png'; 
+var day2Image = new Image();
+day2Image.src = '../images/UI/day_2.png'; 
+var day3Image = new Image();
+day3Image.src = '../images/UI/day_3.png'; 
+var day4Image = new Image();
+day4Image.src = '../images/UI/day_4.png'; 
+var day5Image = new Image();
+day5Image.src = '../images/UI/day_5.png'; 
+var day6Image = new Image();
+day6Image.src = '../images/UI/day_6.png'; 
+var day7Image = new Image();
+day7Image.src = '../images/UI/day_7.png'; 
+
+
+var homeBackground = new Image();
+homeBackground.src = '../images/UI/home_screen.jpg'; 
+
+var nextDayButton = new Image();
+nextDayButton.src = '../images/UI/next_day.png'; 
+
 function home(cart) {
 	
 	var theCanvas = document.getElementById("gameCanvas");
 	var context = theCanvas.getContext("2d");
 	
 	init();
+    
+    var currentDay = 0;
 	
 	var dragIndex;
 	var dragging;
@@ -66,7 +90,10 @@ function home(cart) {
         BUTTON_CART_RIGHT = 3;
 		
         // create buttons
-        btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
+        //btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
+        
+        btnTomorrow = new Button(theCanvas.width - 90, 300, 90, 30, null, BUTTON_TOMORROW, nextDayButton);
+        
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
@@ -247,10 +274,7 @@ function home(cart) {
 	
 	function drawScreen() {
 		//bg
-        context.drawImage(img, 0, 0);
-		
-        context.fillStyle = "white";
-        context.fillRect(EAT_AREA_X, EAT_AREA_Y, EAT_AREA_WIDTH, EAT_AREA_HEIGHT);
+        context.drawImage(homeBackground, 0, 0);
 		
         btnTomorrow.drawToContext(context);
         btnCartLeft.drawToContext(context);
@@ -260,6 +284,8 @@ function home(cart) {
         meatProgressBar.drawToContext(context);
         grainProgressBar.drawToContext(context);
         vegetableProgressBar.drawToContext(context);
+        
+        dayDisplay(currentDay);
 
         if (cart != null) {
             drawCart();
@@ -290,6 +316,35 @@ function home(cart) {
 		meatProgressBar.current = 0;
 		grainProgressBar.current = 0;
 		vegetableProgressBar.current = 0;
+        
+        currentDay += 1; //increase day by 1
+        drawScreen();
+    }
+    
+    function dayDisplay(currentDay) {
+        switch (currentDay) {
+            case 1:
+                context.drawImage(day2Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 2:
+                context.drawImage(day3Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 3:
+                context.drawImage(day4Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 4:
+                context.drawImage(day5Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 5:
+                context.drawImage(day6Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 6:
+                context.drawImage(day7Image,theCanvas.width - 60, 10, 50, 25); 
+                break;
+            default:
+                context.drawImage(day1Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+        }  
     }
 
     function CartLeft() {
