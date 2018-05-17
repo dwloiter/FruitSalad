@@ -348,6 +348,7 @@ function canvasApp() {
         window.removeEventListener("mouseup", mouseUpListener, false);
         window.removeEventListener("mousemove", mouseMoveListener, false);
         home(cart);
+		
     }
 
     function CartLeft() {
