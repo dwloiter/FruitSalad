@@ -452,6 +452,9 @@ function canvasApp() {
         cart.splice(cartDragIndex, 1);
         cartDragIndex = -1;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+        if (cartMaxItem == 0) {
+            CartLeft();
+        }
     }
 	
     function GoHome() {

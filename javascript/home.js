@@ -275,7 +275,10 @@ function home(cart) {
 				vegetableProgressBar.current = Math.min(vegetableProgressBar.current + cart[dragIndex].vegetable, MAX_HUNGER);
 				cart.splice(dragIndex, 1);
 				dragIndex = -1;
-		        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+                cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+                if (cartMaxItem == 0) {
+                    CartLeft();
+                }
 			}
 			else {
 				targetX = cart[dragIndex].origX;
