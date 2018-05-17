@@ -319,10 +319,10 @@ function canvasApp() {
 	function mouseMoveListener(evt) {
 		var posX;
         var posY;
-        var minX = shapes[dragIndex].width / 2;
-        var maxX = theCanvas.width - shapes[dragIndex].width / 2;
-        var minY = shapes[dragIndex].height / 2;
-        var maxY = theCanvas.height - shapes[dragIndex].height / 2;
+        var minX = 40;
+        var maxX = theCanvas.width - 40;
+        var minY = 40;
+        var maxY = theCanvas.height - 40;
 		
 		//getting mouse position correctly 
 		var bRect = theCanvas.getBoundingClientRect();
