@@ -25,6 +25,7 @@ function StoreItem(posX, posY, width, height, foodData) {
     }
     else {
         this.hunger = 10;
+        this.Expiration = Math.floor(Math.random() * 7) + 1;
 
         switch (Math.floor(Math.random() * 3)) {
             case 1:
@@ -108,5 +109,13 @@ StoreItem.prototype.drawToContext = function (theContext) {
     }
     else {
         theContext.drawImage(foodImages.get(this.name), this.x, this.y, this.width, this.height);
+    }
+
+    theContext.textAlign = "right";
+    if (this.foodData != null) {
+        theContext.fillText(this.foodData.Expiration, this.x + this.width, this.y);
+    }
+    else {
+        theContext.fillText(this.Expiration, this.x + this.width, this.y);
     }
 }
