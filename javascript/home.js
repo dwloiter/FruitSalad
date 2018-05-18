@@ -145,6 +145,11 @@ function home(cart) {
         grainProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, totalGrain, max);
         progressCurY += diffY;
         vegetableProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, totalVegetable, max);
+        
+        hungerProgressBar.vcolor = "#4169e1";
+        meatProgressBar.vcolor = "#ED4337";
+        grainProgressBar.vcolor = "#ffa500";
+        vegetableProgressBar.vcolor = "#50c878";
 
         EAT_AREA_X = 0;
         EAT_AREA_Y = 0;

@@ -57,15 +57,15 @@ function StoreItem(posX, posY, width, height, foodData) {
 
     this.hungerProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.hunger, max);
     progressCurY += diffY;
-    this.hungerProgressBar.vcolor = "#4169e1"
+    this.hungerProgressBar.vcolor = "#4169e1";
     this.meatProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.meat, max);
     progressCurY += diffY;
-    this.meatProgressBar.vcolor = "#ED4337"
+    this.meatProgressBar.vcolor = "#ED4337";
     this.grainProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.grain, max);
     progressCurY += diffY;
-    this.grainProgressBar.vcolor = "#ffa500"
+    this.grainProgressBar.vcolor = "#ffa500";
     this.vegetableProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, this.vegetable, max);
-    this.vegetableProgressBar.vcolor = "#50c878"
+    this.vegetableProgressBar.vcolor = "#50c878";
 }
 
 StoreItem.prototype.refreshProgressBar = function() {
