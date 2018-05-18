@@ -1,3 +1,4 @@
+var defaultSound =document.getElementById("myAudio");
 
 function Button(posX, posY, width, height, message, value, image)
 {
@@ -19,16 +20,21 @@ function Button(posX, posY, width, height, message, value, image)
     // data
     this.message = message;
     this.value = value;
+	
+	this.sound = defaultSound;
 }
 
 Button.prototype.mouseDownListener = function (mouseX, mouseY)
 {
     if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height)
     {
+		//play sound 
+		defaultSound.play();
         return true;
     }
 
     return false;
+
 }
 
 // draw button
