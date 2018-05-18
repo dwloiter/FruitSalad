@@ -405,7 +405,7 @@ function canvasApp() {
         }
 		
 		drawTotal();
-
+		
         drawShapes();
 
         btnInfo.drawToContext(context);
@@ -455,12 +455,15 @@ function canvasApp() {
         if (cartMaxItem == 0) {
             CartLeft();
         }
+        clearInterval(timer);
+        drawScreen();
     }
 	
     function GoHome() {
         window.removeEventListener("mousedown", mouseDownListener, false);
         window.removeEventListener("mouseup", mouseUpListener, false);
         window.removeEventListener("mousemove", mouseMoveListener, false);
+        clearInterval(timer);
         home(cart);
     }
 
