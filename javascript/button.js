@@ -29,7 +29,7 @@ Button.prototype.mouseDownListener = function (mouseX, mouseY)
     if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height)
     {
 		//play sound 
-		defaultSound.play();
+		this.sound.play();
         return true;
     }
 
