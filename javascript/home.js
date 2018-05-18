@@ -317,10 +317,7 @@ function home(cart) {
         }
 		else {
 			//bg
-			context.drawImage(img, 0, 0);
-			
-			context.fillStyle = "white";
-			context.fillRect(EAT_AREA_X, EAT_AREA_Y, EAT_AREA_WIDTH, EAT_AREA_HEIGHT);
+			context.drawImage(homeBackground, 0, 0);
 			
 			if(currentDay < END_WEEK){
 				btnTomorrow.drawToContext(context);
