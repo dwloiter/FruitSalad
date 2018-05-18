@@ -24,11 +24,11 @@ function main_menu(){
 	context.font = "45px Courier";
 	context.fillStyle = "#653789";
 	context.textAlign = "center";
-	context.fillText("HTML5 Game", canvas.width/2, canvas.height/2);
+	context.fillText("Hunger Management", canvas.width/2, canvas.height/2);
     
     /* Instructions */
 	context.font = "15px Courier";
-	context.fillText("Press ENTER To Start", canvas.width/2, canvas.height/2 + 35);
+	context.fillText("Tap or Click To Start", canvas.width/2, canvas.height/2 + 35);
 }
 
 /* Clear function: Clears all things on canvas when called. */

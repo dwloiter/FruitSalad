@@ -24,6 +24,7 @@ var homeBackground = new Image();
 homeBackground.src = '../images/UI/home_screen.jpg'; 
 
 var nextDayButton = new Image();
+
 nextDayButton.src = '../images/UI/next_day.png';
 function home(cart) {
 	
@@ -32,7 +33,7 @@ function home(cart) {
 	
 	init();
     
-    var currentDay;
+  var currentDay;
 	
 	var dragIndex;
 	var dragging;
@@ -109,9 +110,9 @@ function home(cart) {
         //btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
         btnTomorrow = new Button(theCanvas.width - 90, 300, 90, 30, null, BUTTON_TOMORROW, nextDayButton);
 
-		btnEnd = new Button(300, 300, 100, 40, "End Week", BUTTON_END, null);
-		btnRestart = new Button(50, 430, 120, 40, "Restart", BUTTON_RESTART, null);
-		btnBoard = new Button(280, 430, 120, 40, "Leader Board", BUTTON_BOARD, null);
+    		btnEnd = new Button(300, 300, 100, 40, "End Week", BUTTON_END, null);
+    		btnRestart = new Button(50, 430, 120, 40, "Restart", BUTTON_RESTART, null);
+	    	btnBoard = new Button(280, 430, 120, 40, "Leader Board", BUTTON_BOARD, null);
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
