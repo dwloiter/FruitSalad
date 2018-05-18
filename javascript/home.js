@@ -1,17 +1,38 @@
 //JavaScript HTML5 Canvas example by Dan Gries, rectangleworld.com.
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
-var leftImg = new Image();
 leftImg.src = '../images/UI/left.png';
-var rightImg = new Image();
 rightImg.src = '../images/UI/right.png'; 
 
+var day1Image = new Image();
+day1Image.src = '../images/UI/day_1.png'; 
+var day2Image = new Image();
+day2Image.src = '../images/UI/day_2.png'; 
+var day3Image = new Image();
+day3Image.src = '../images/UI/day_3.png'; 
+var day4Image = new Image();
+day4Image.src = '../images/UI/day_4.png'; 
+var day5Image = new Image();
+day5Image.src = '../images/UI/day_5.png'; 
+var day6Image = new Image();
+day6Image.src = '../images/UI/day_6.png'; 
+var day7Image = new Image();
+day7Image.src = '../images/UI/day_7.png'; 
+
+
+var homeBackground = new Image();
+homeBackground.src = '../images/UI/home_screen.jpg'; 
+
+var nextDayButton = new Image();
+nextDayButton.src = '../images/UI/next_day.png';
 function home(cart) {
 	
 	var theCanvas = document.getElementById("gameCanvas");
 	var context = theCanvas.getContext("2d");
 	
 	init();
+    
+    var currentDay;
 	
 	var dragIndex;
 	var dragging;
@@ -24,11 +45,13 @@ function home(cart) {
 	var targetY;
     var easeAmount;
 	var currentPage;
-	var dish = [];
 
     var BUTTON_TOMORROW;
     var BUTTON_CART_LEFT;
     var BUTTON_CART_RIGHT;
+	var BUTTON_END;
+	var BUTTON_RESTART;
+	var BUTTON_BOARD;
 
     var EAT_AREA_X;
     var EAT_AREA_Y;
@@ -36,6 +59,8 @@ function home(cart) {
     var EAT_AREA_HEIGHT;
 	
 	var MAX_HUNGER = 100;
+	var END_WEEK;
+	var DEDUCT_SCORE = 10;
 
     var btnTomorrow;
 
@@ -51,22 +76,42 @@ function home(cart) {
 
     var cartMaxItem;
     var cartStartIndex;
-
+	
+	var score;
+	var end;
+	var wasted;
+	var eaten;
+	
     function init() {
         numCartItems = 4;
         curCartIndex = 0;
         currentPage = 0;
         easeAmount = 0.45;
+		score = 100;
+		end = false;
+		wasted = 0;
+		eaten = 0;
 
+		currentDay = 0;
+		END_WEEK = 6;
+	
         cartStartIndex = 0;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
         BUTTON_TOMORROW = 1;
         BUTTON_CART_LEFT = 2;
         BUTTON_CART_RIGHT = 3;
+		BUTTON_END = 4;
+		BUTTON_RESTART = 5;
+		BUTTON_BOARD = 6;
 		
         // create buttons
-        btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
+        //btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
+        btnTomorrow = new Button(theCanvas.width - 90, 300, 90, 30, null, BUTTON_TOMORROW, nextDayButton);
+
+		btnEnd = new Button(300, 300, 100, 40, "End Week", BUTTON_END, null);
+		btnRestart = new Button(50, 430, 120, 40, "Restart", BUTTON_RESTART, null);
+		btnBoard = new Button(280, 430, 120, 40, "Leader Board", BUTTON_BOARD, null);
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
@@ -111,7 +156,8 @@ function home(cart) {
         theCanvas.addEventListener("mousedown", mouseDownListener, false);
 
     }
-
+	
+	//MouseDown
 	function mouseDownListener(evt) {
 		var i;
 		
@@ -119,44 +165,62 @@ function home(cart) {
 		var bRect = theCanvas.getBoundingClientRect();
 		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
 		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
+		
+		if (end){
+			if(btnBoard.mouseDownListener(mouseX, mouseY)){
+			Board();
+			}
+			else if(btnRestart.mouseDownListener(mouseX, mouseY)){
+				Restart();
+			}
 				
-		/*
-		Below, we find if a shape was clicked. Since a "hit" on a square or a circle has to be measured differently, the
-		hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
-		for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
-		*/
-        for (i = 0; i < cartMaxItem; i++) {
-			if (cart[i + cartStartIndex].hitTest(mouseX, mouseY)) {	
-				dragging = true;
-				//the following variable will be reset if this loop repeats with another successful hit:
-				dragIndex = i + cartStartIndex;
+		}
+		else {
+			/*
+			Below, we find if a shape was clicked. Since a "hit" on a square or a circle has to be measured differently, the
+			hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
+			for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
+			*/
+			for (i = 0; i < cartMaxItem; i++) {
+				if (cart[i + cartStartIndex].hitTest(mouseX, mouseY)) {	
+					dragging = true;
+					//the following variable will be reset if this loop repeats with another successful hit:
+					dragIndex = i + cartStartIndex;
+				}
+			}
+			if (dragging) {
+				window.addEventListener("mousemove", mouseMoveListener, false);
+				
+				//shapeto drag is now last one in array
+				dragHoldX = mouseX - cart[dragIndex].x;
+				dragHoldY = mouseY - cart[dragIndex].y;
+				
+				//The "target" position is where the object should be if it were to move there instantaneously. But we will
+				//set up the code so that this target position is approached gradually, producing a smooth motion.
+				targetX = mouseX - dragHoldX;
+				targetY = mouseY - dragHoldY;
+				
+				//start timer
+				timer = setInterval(onTimerTick, 1000/30);
+			}
+			else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
+				CartLeft();
+			}
+			else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
+				CartRight();
+			}
+			
+			if(currentDay < END_WEEK){
+				if (btnTomorrow.mouseDownListener(mouseX, mouseY)) {
+				   GoTomorrow();
+			   }
+			}
+			else {
+				if (btnEnd.mouseDownListener(mouseX, mouseY)){
+					End();
+				}
 			}
 		}
-		
-		if (dragging) {
-			window.addEventListener("mousemove", mouseMoveListener, false);
-			
-			//shapeto drag is now last one in array
-            dragHoldX = mouseX - cart[dragIndex].x;
-            dragHoldY = mouseY - cart[dragIndex].y;
-			
-			//The "target" position is where the object should be if it were to move there instantaneously. But we will
-			//set up the code so that this target position is approached gradually, producing a smooth motion.
-			targetX = mouseX - dragHoldX;
-			targetY = mouseY - dragHoldY;
-			
-			//start timer
-			timer = setInterval(onTimerTick, 1000/30);
-        }
-        else if (btnTomorrow.mouseDownListener(mouseX, mouseY)) {
-            GoTomorrow();
-        }
-        else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
-            CartLeft();
-        }
-        else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
-            CartRight();
-        }
 
         theCanvas.removeEventListener("mousedown", mouseDownListener, false);
 		window.addEventListener("mouseup", mouseUpListener, false);
@@ -184,7 +248,7 @@ function home(cart) {
 				//stop timer:
 				clearInterval(timer);
                 
-                dragIndex = -1;s
+                dragIndex = -1;
 			}
 		}
 		drawScreen();
@@ -246,24 +310,39 @@ function home(cart) {
 	}
 	
 	function drawScreen() {
-		//bg
-        context.drawImage(img, 0, 0);
-		
-        context.fillStyle = "white";
-        context.fillRect(EAT_AREA_X, EAT_AREA_Y, EAT_AREA_WIDTH, EAT_AREA_HEIGHT);
-		
-        btnTomorrow.drawToContext(context);
-        btnCartLeft.drawToContext(context);
-        btnCartRight.drawToContext(context);
 
-        hungerProgressBar.drawToContext(context);
-        meatProgressBar.drawToContext(context);
-        grainProgressBar.drawToContext(context);
-        vegetableProgressBar.drawToContext(context);
-
-        if (cart != null) {
-            drawCart();
+        if (end) {
+            drawScore();
         }
+		else {
+			//bg
+			context.drawImage(img, 0, 0);
+			
+			context.fillStyle = "white";
+			context.fillRect(EAT_AREA_X, EAT_AREA_Y, EAT_AREA_WIDTH, EAT_AREA_HEIGHT);
+			
+			if(currentDay < END_WEEK){
+				btnTomorrow.drawToContext(context);
+			}
+			else {
+				btnEnd.drawToContext(context);
+			}
+			
+			btnCartLeft.drawToContext(context);
+			btnCartRight.drawToContext(context);
+			
+	
+			hungerProgressBar.drawToContext(context);
+			meatProgressBar.drawToContext(context);
+			grainProgressBar.drawToContext(context);
+			vegetableProgressBar.drawToContext(context);
+
+			dayDisplay(currentDay);
+			
+			if (cart != null) {
+				drawCart();
+			}
+		}
     }
 
     function Eat() {
@@ -276,6 +355,12 @@ function home(cart) {
 				cart.splice(dragIndex, 1);
 				dragIndex = -1;
 		        cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+				eaten++;
+                if (cartMaxItem == 0) {
+                    CartLeft();
+                }
+                clearInterval(timer);
+                drawScreen();
 			}
 			else {
 				targetX = cart[dragIndex].origX;
@@ -290,8 +375,88 @@ function home(cart) {
 		meatProgressBar.current = 0;
 		grainProgressBar.current = 0;
 		vegetableProgressBar.current = 0;
+		currentDay++;
+		
+		var i;
+		while(i < cart.length){
+			cart[i].foodData.Expiration--;
+			if(cart[i].foodData.Expiration <= 0){
+				cart.splice(i, 1);
+				wasted++;
+				score -= DEDUCT_SCORE;
+			} else{
+				i++;
+			}
+		}
+        drawScreen();
+	}
+    function dayDisplay(currentDay) {
+        switch (currentDay) {
+            case 1:
+                context.drawImage(day2Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 2:
+                context.drawImage(day3Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 3:
+                context.drawImage(day4Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 4:
+                context.drawImage(day5Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 5:
+                context.drawImage(day6Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+            case 6:
+                context.drawImage(day7Image,theCanvas.width - 60, 10, 50, 25); 
+                break;
+            default:
+                context.drawImage(day1Image,theCanvas.width - 60, 10, 50, 25);
+                break;
+        }  
     }
+	
+	function End(){
+		end = !end;
+        if (!end) {
+            var INFO_BTN_WIDTH = 100;
+            var INFO_BTN_HEIGHT = 40;
+            
+            btnEnd.x = theCanvas.width - INFO_BTN_WIDTH;
+            btnEnd.width = INFO_BTN_WIDTH;
+            btnEnd.height = INFO_BTN_HEIGHT;
+			btnEnd.message = "End";
+			
+        }
+        else {
+            btnEnd.x = 0;
+            btnEnd.width = theCanvas.width;
+            btnEnd.height = theCanvas.height;
+            btnEnd.message = "";
+        }
+		
+        drawScreen();
+		
+		var i;
+		for(i = 0; i < cart.length; i++){
+			wasted++;
+		}
 
+	}
+	
+	function drawScore() {
+		context.fillStyle = "#FFFFFF";
+		context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+        context.fillStyle = "#000000";
+        context.textAlign = "left";
+        context.fillText("Score: " + score, 30, 30);    
+        context.fillText("Eaten Food: " + eaten, 30, 50);    
+        context.fillText("Wasted Food: " + wasted, 30, 70);
+		
+		btnRestart.drawToContext(context);
+		btnBoard.drawToContext(context);
+    }
+	
     function CartLeft() {
 		if(currentPage > 0){
 			currentPage--;
@@ -312,5 +477,25 @@ function home(cart) {
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
         drawScreen();
-    }	
+    }
+	
+	function Notice(){
+		if(totalHunger < 10){
+			var img2 =  new Image();
+			img2.src = '../images/shelf.jpg';f
+			context.drawImage(img2, 0, 0, theCanvas.width, theCanvas.height);
+		}
+	}
+	
+	function Board(){
+		window.location.href= '../html/leaderboard.html';
+	}
+	
+	function Restart(){
+		window.removeEventListener("mousedown", mouseDownListener, false);
+        window.removeEventListener("mouseup", mouseUpListener, false);
+        window.removeEventListener("mousemove", mouseMoveListener, false);
+        clearInterval(timer);
+        canvasApp();
+	}
 }
