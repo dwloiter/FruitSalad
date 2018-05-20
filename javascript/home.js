@@ -24,7 +24,6 @@ var homeBackground = new Image();
 homeBackground.src = '../images/UI/home_screen.jpg'; 
 
 var nextDayButton = new Image();
-
 nextDayButton.src = '../images/UI/next_day.png';
 function home(cart) {
 	
@@ -61,7 +60,7 @@ function home(cart) {
 	
 	var MAX_HUNGER = 100;
 	var END_WEEK;
-	var DEDUCT_SCORE = 10;
+	var DEDUCT_SCORE;
 
     var btnTomorrow;
 
@@ -88,7 +87,6 @@ function home(cart) {
         curCartIndex = 0;
         currentPage = 0;
         easeAmount = 0.45;
-		score = 100;
 		end = false;
 		wasted = 0;
 		eaten = 0;
@@ -96,7 +94,10 @@ function home(cart) {
 		currentDay = 0;
 		END_WEEK = 6;
 	
-        cartStartIndex = 0;
+		score = 0;
+		DEDUCT_SCORE = 10;
+        
+		cartStartIndex = 0;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
         BUTTON_TOMORROW = 1;
@@ -110,9 +111,9 @@ function home(cart) {
         //btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
         btnTomorrow = new Button(theCanvas.width - 90, 300, 90, 30, null, BUTTON_TOMORROW, nextDayButton);
 
-    		btnEnd = new Button(300, 300, 100, 40, "End Week", BUTTON_END, null);
-    		btnRestart = new Button(50, 430, 120, 40, "Restart", BUTTON_RESTART, null);
-	    	btnBoard = new Button(280, 430, 120, 40, "Leader Board", BUTTON_BOARD, null);
+		btnEnd = new Button(300, 300, 100, 40, "End Week", BUTTON_END, null);
+		btnRestart = new Button(50, 430, 120, 40, "Restart", BUTTON_RESTART, null);
+		btnBoard = new Button(280, 430, 120, 40, "Leader Board", BUTTON_BOARD, null);
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
@@ -372,6 +373,7 @@ function home(cart) {
     }
     
     function GoTomorrow() {
+		calScore();
 		hungerProgressBar.current = 0;
 		meatProgressBar.current = 0;
 		grainProgressBar.current = 0;
@@ -389,8 +391,14 @@ function home(cart) {
 				i++;
 			}
 		}
+		
         drawScreen();
 	}
+	
+	function calScore(){
+		score += hungerProgressBar.current + meatProgressBar.current + vegetableProgressBar.current + grainProgressBar.current;	
+	}
+	
     function dayDisplay(currentDay) {
         switch (currentDay) {
             case 1:
@@ -436,13 +444,12 @@ function home(cart) {
             btnEnd.message = "";
         }
 		
-        drawScreen();
-		
 		var i;
 		for(i = 0; i < cart.length; i++){
 			wasted++;
 		}
-
+		
+        drawScreen();
 	}
 	
 	function drawScore() {
