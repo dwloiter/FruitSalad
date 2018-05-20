@@ -60,7 +60,7 @@ function canvasApp() {
     var cartTargetX;
     var cartTargetY;
 
-
+    var popup;
 	
 	function init() {
         numShapes = 6;
@@ -117,6 +117,8 @@ function canvasApp() {
         var INFO_BTN_HEIGHT = 40;
         
         btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0, INFO_BTN_WIDTH, INFO_BTN_HEIGHT, null, BUTTON_INFO, informationButton);
+
+        popup = new Popup(10, 30, null);
         
         // draw
 		drawScreen();
@@ -160,14 +162,18 @@ function canvasApp() {
         }
 	}
 	
-	function mouseDownListener(evt) {
+    function mouseDownListener(evt) {
 		var i;
 		
 		//getting mouse position correctly 
 		var bRect = theCanvas.getBoundingClientRect();
 		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
 		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
-				
+
+        if (popup.isShow && popup.mouseDownListener(mouseX, mouseY)) {
+            return false;
+        }
+
 		/*
 		Below, we find if a shape was clicked. Since a "hit" on a square or a circle has to be measured differently, the
 		hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
@@ -208,8 +214,11 @@ function canvasApp() {
 			//set up the code so that this target position is approached gradually, producing a smooth motion.
 			targetX = mouseX - dragHoldX;
 			targetY = mouseY - dragHoldY;
-			
+
 			//start timer
+            if (timer != null) {
+                clearInterval(timer);
+            }
 			timer = setInterval(onTimerTick, 1000/30);
         }
         else if (cartDragging) {
@@ -225,6 +234,9 @@ function canvasApp() {
             cartTargetY = mouseY - cartDragHoldY;
 
             //start timer
+            if (timer != null) {
+                clearInterval(timer);
+            }
             timer = setInterval(onTimerTick, 1000 / 30);
         }
         else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
@@ -239,7 +251,8 @@ function canvasApp() {
 		else if (btnPrev.mouseDownListener(mouseX, mouseY)) {
             GoPrev();
         }
-		theCanvas.removeEventListener("mousedown", mouseDownListener, false);
+
+        theCanvas.removeEventListener("mousedown", mouseDownListener, false);
         window.addEventListener("mouseup", mouseUpListener, false);
 
         if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
@@ -272,8 +285,7 @@ function canvasApp() {
                 dragIndex = -1;
             }
         }
-
-        if (cartDragIndex != -1) {
+        else if (cartDragIndex != -1) {
             //because of reordering, the dragging shape is the last one in the array.
             cart[cartDragIndex].x = cart[cartDragIndex].x + easeAmount * (cartTargetX - cart[cartDragIndex].x);
             cart[cartDragIndex].y = cart[cartDragIndex].y + easeAmount * (cartTargetY - cart[cartDragIndex].y);
@@ -410,6 +422,8 @@ function canvasApp() {
 
         btnInfo.drawToContext(context);
 
+        popup.drawToContext(context);
+
         if (showInfo) {
             drawInfo();
         }
@@ -424,17 +438,22 @@ function canvasApp() {
 		else{
 			price = shapes[dragIndex].foodData.Price;
 		}
-        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height && budget >= totalPrice + price) {
-            var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[dragIndex].foodData);
-			// need to copy values
-            temp.hunger = shapes[dragIndex].hunger;
-            temp.grain = shapes[dragIndex].grain;
-            temp.vegetable = shapes[dragIndex].vegetable;
-            temp.meat = shapes[dragIndex].meat;
-			temp.refreshProgressBar();
-			totalPrice += price;
-            cart.push(temp);
-            cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
+            if (budget >= totalPrice + price) {
+                var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[dragIndex].foodData);
+                // need to copy values
+                temp.hunger = shapes[dragIndex].hunger;
+                temp.grain = shapes[dragIndex].grain;
+                temp.vegetable = shapes[dragIndex].vegetable;
+                temp.meat = shapes[dragIndex].meat;
+                temp.refreshProgressBar();
+                totalPrice += price;
+                cart.push(temp);
+                cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+            }
+            else {
+                popup.showMessage(context, "It exceeds budget.", POPUP_NO_BTN, 3000, drawScreen);
+            }
 		}
     }
 

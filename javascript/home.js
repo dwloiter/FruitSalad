@@ -81,7 +81,9 @@ function home(cart) {
 	var end;
 	var wasted;
 	var eaten;
-	
+
+    var popup;
+
     function init() {
         numCartItems = 4;
         curCartIndex = 0;
@@ -152,11 +154,12 @@ function home(cart) {
         EAT_AREA_WIDTH = theCanvas.width;
         EAT_AREA_HEIGHT = 330;
 
+        popup = new Popup(10, 30, null);
+
         // draw
 		drawScreen();
 		
         theCanvas.addEventListener("mousedown", mouseDownListener, false);
-
     }
 	
 	//MouseDown
@@ -167,7 +170,11 @@ function home(cart) {
 		var bRect = theCanvas.getBoundingClientRect();
 		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
 		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
-		
+
+        if (popup.isShow && popup.mouseDownListener(mouseX, mouseY)) {
+            return false;
+        }
+
 		if (end){
 			if(btnBoard.mouseDownListener(mouseX, mouseY)){
 			Board();
@@ -175,7 +182,6 @@ function home(cart) {
 			else if(btnRestart.mouseDownListener(mouseX, mouseY)){
 				Restart();
 			}
-				
 		}
 		else {
 			/*
@@ -203,6 +209,9 @@ function home(cart) {
 				targetY = mouseY - dragHoldY;
 				
 				//start timer
+                if (timer != null) {
+                    clearInterval(timer);
+                }
 				timer = setInterval(onTimerTick, 1000/30);
 			}
 			else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
@@ -252,7 +261,7 @@ function home(cart) {
                 
                 dragIndex = -1;
 			}
-		}
+        }
 		drawScreen();
 	}
 	
@@ -344,7 +353,9 @@ function home(cart) {
 			if (cart != null) {
 				drawCart();
 			}
-		}
+
+            popup.drawToContext(context);
+        }
     }
 
     function Eat() {
@@ -365,7 +376,8 @@ function home(cart) {
                 drawScreen();
 			}
 			else {
-				targetX = cart[dragIndex].origX;
+                popup.showMessage(context, "You cannot eat more today.", POPUP_NO_BTN, 3000, drawScreen);
+                targetX = cart[dragIndex].origX;
                 targetY = cart[dragIndex].origY;
 			}
 		}

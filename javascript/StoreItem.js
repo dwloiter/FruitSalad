@@ -24,7 +24,7 @@ function StoreItem(posX, posY, width, height, foodData) {
         this.name = foodData.Name;
     }
     else {
-        this.hunger = 10;
+        this.hunger = 25;
 
         switch (Math.floor(Math.random() * 3)) {
             case 1:
