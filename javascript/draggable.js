@@ -61,6 +61,8 @@ function canvasApp() {
     var cartTargetY;
 
     var popup;
+
+    var isTouch;
 	
 	function init() {
         numShapes = 6;
@@ -121,12 +123,45 @@ function canvasApp() {
         popup = new Popup(10, 30, null);
         
         // draw
-		drawScreen();
-		
-		theCanvas.addEventListener("mousedown", mouseDownListener, false);
+        drawScreen();
+
+        isTouch = "ontouchstart" in window;
+
+        if (isTouch) {
+            theCanvas.addEventListener("touchstart", touchStartEventListener, false);
+        }
+        else {
+            theCanvas.addEventListener("mousedown", mouseDownListener, false);
+        }
     }
 
-	
+    function touchStartEventListener(event) {
+        var touch = event.touches[0];
+        var mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        mouseDownListener(mouseEvent);
+    }
+
+    function touchEndEventListener(event) {
+        var touch = event.touches[0];
+        var mouseEvent = new MouseEvent("mouseup", {
+            clientX: mouseX,
+            clientY: mouseY
+        });
+        mouseUpListener(mouseEvent);
+    }
+
+    function touchMoveEventListener(event) {
+        var touch = event.touches[0];
+        var mouseEvent = new MouseEvent("mousemove", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        mouseMoveListener(mouseEvent);
+    }
+
 	function makeShapes() {
 
         var i;
@@ -204,7 +239,12 @@ function canvasApp() {
             ToggleInfo();
         }
 		else if (dragging) {
-			window.addEventListener("mousemove", mouseMoveListener, false);
+            if (isTouch) {
+                window.addEventListener("touchmove", touchMoveEventListener, false);
+            }
+            else {
+                window.addEventListener("mousemove", mouseMoveListener, false);
+            }
 			
 			//shapeto drag is now last one in array
 			dragHoldX = mouseX - shapes[dragIndex].x;
@@ -222,7 +262,12 @@ function canvasApp() {
 			timer = setInterval(onTimerTick, 1000/30);
         }
         else if (cartDragging) {
-            window.addEventListener("mousemove", mouseMoveListener, false);
+            if (isTouch) {
+                window.addEventListener("touchmove", touchMoveEventListener, false);
+            }
+            else {
+                window.addEventListener("mousemove", mouseMoveListener, false);
+            }
 
             //shapeto drag is now last one in array
             cartDragHoldX = mouseX - cart[cartDragIndex].x;
@@ -252,8 +297,14 @@ function canvasApp() {
             GoPrev();
         }
 
-        theCanvas.removeEventListener("mousedown", mouseDownListener, false);
-        window.addEventListener("mouseup", mouseUpListener, false);
+        if (isTouch) {
+            theCanvas.removeEventListener("touchstart", touchStartEventListener, false);
+            window.addEventListener("touchend", touchEndEventListener, false);
+        }
+        else {
+            theCanvas.removeEventListener("mousedown", mouseDownListener, false);
+            window.addEventListener("mouseup", mouseUpListener, false);
+        }
 
         if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
             GoHome();
@@ -305,19 +356,35 @@ function canvasApp() {
 	}
 	
 	function mouseUpListener(evt) {
-		theCanvas.addEventListener("mousedown", mouseDownListener, false);
-		window.removeEventListener("mouseup", mouseUpListener, false);
+        if (isTouch) {
+            theCanvas.addEventListener("touchstart", touchStartEventListener, false);
+            window.removeEventListener("touchend", touchEndEventListener, false);
+        }
+        else {
+            theCanvas.addEventListener("mousedown", mouseDownListener, false);
+            window.removeEventListener("mouseup", mouseUpListener, false);
+        }
 		if (dragging) {
 			dragging = false;
-			window.removeEventListener("mousemove", mouseMoveListener, false);
-			getShapes();
+            if (isTouch) {
+                window.removeEventListener("touchmove", touchMoveEventListener, false);
+            }
+            else {
+                window.removeEventListener("mousemove", mouseMoveListener, false);
+            }
+            getShapes();
 			targetX = shapes[dragIndex].origX;
             targetY = shapes[dragIndex].origY;
         }
 
         if (cartDragging) {
             cartDragging = false;
-            window.removeEventListener("mousemove", mouseMoveListener, false);
+            if (isTouch) {
+                window.removeEventListener("touchmove", touchMoveEventListener, false);
+            }
+            else {
+                window.removeEventListener("mousemove", mouseMoveListener, false);
+            }
             if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
                 cartTargetX = cart[cartDragIndex].origX;
                 cartTargetY = cart[cartDragIndex].origY;
@@ -479,9 +546,16 @@ function canvasApp() {
     }
 	
     function GoHome() {
-        window.removeEventListener("mousedown", mouseDownListener, false);
-        window.removeEventListener("mouseup", mouseUpListener, false);
-        window.removeEventListener("mousemove", mouseMoveListener, false);
+        if (isTouch) {
+            theCanvas.removeEventListener("touchstart", touchStartEventListener, false);
+            window.removeEventListener("touchend", touchEndEventListener, false);
+            window.removeEventListener("touchmove", touchMoveEventListener, false);
+        }
+        else {
+            theCanvas.removeEventListener("mousedown", mouseDownListener, false);
+            window.removeEventListener("mouseup", mouseUpListener, false);
+            window.removeEventListener("mousemove", mouseMoveListener, false);
+        }
         clearInterval(timer);
         home(cart);
     }
