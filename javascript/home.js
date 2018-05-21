@@ -84,6 +84,8 @@ function home(cart) {
 
     var popup;
 
+    var isTouch;
+
     function init() {
         numCartItems = 4;
         curCartIndex = 0;
@@ -157,9 +159,43 @@ function home(cart) {
         popup = new Popup(10, 30, null);
 
         // draw
-		drawScreen();
-		
-        theCanvas.addEventListener("mousedown", mouseDownListener, false);
+        drawScreen();
+
+        isTouch = "ontouchstart" in window;
+
+        if (isTouch) {
+            theCanvas.addEventListener("touchstart", touchStartEventListener, false);
+        }
+        else {
+            theCanvas.addEventListener("mousedown", mouseDownListener, false);
+        }
+    }
+
+    function touchStartEventListener(event) {
+        var touch = event.touches[0];
+        var mouseEvent = new MouseEvent("mousedown", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        mouseDownListener(mouseEvent);
+    }
+
+    function touchEndEventListener(event) {
+        var touch = event.touches[0];
+        var mouseEvent = new MouseEvent("mouseup", {
+            clientX: mouseX,
+            clientY: mouseY
+        });
+        mouseUpListener(mouseEvent);
+    }
+
+    function touchMoveEventListener(event) {
+        var touch = event.touches[0];
+        var mouseEvent = new MouseEvent("mousemove", {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+        mouseMoveListener(mouseEvent);
     }
 	
 	//MouseDown
@@ -197,7 +233,12 @@ function home(cart) {
 				}
 			}
 			if (dragging) {
-				window.addEventListener("mousemove", mouseMoveListener, false);
+                if (isTouch) {
+                    window.addEventListener("touchmove", touchMoveEventListener, false);
+                }
+                else {
+                    window.addEventListener("mousemove", mouseMoveListener, false);
+                }
 				
 				//shapeto drag is now last one in array
 				dragHoldX = mouseX - cart[dragIndex].x;
@@ -233,8 +274,14 @@ function home(cart) {
 			}
 		}
 
-        theCanvas.removeEventListener("mousedown", mouseDownListener, false);
-		window.addEventListener("mouseup", mouseUpListener, false);
+        if (isTouch) {
+            theCanvas.removeEventListener("touchstart", touchStartEventListener, false);
+            window.addEventListener("touchend", touchEndEventListener, false);
+        }
+        else {
+            theCanvas.removeEventListener("mousedown", mouseDownListener, false);
+            window.addEventListener("mouseup", mouseUpListener, false);
+        }
 		
 		//code below prevents the mouse down from having an effect on the main browser window:
 		if (evt.preventDefault) {
@@ -266,11 +313,22 @@ function home(cart) {
 	}
 	
 	function mouseUpListener(evt) {
-		theCanvas.addEventListener("mousedown", mouseDownListener, false);
-		window.removeEventListener("mouseup", mouseUpListener, false);
+        if (isTouch) {
+            theCanvas.addEventListener("touchstart", touchStartEventListener, false);
+            window.removeEventListener("touchend", touchEndEventListener, false);
+        }
+        else {
+            theCanvas.addEventListener("mousedown", mouseDownListener, false);
+            window.removeEventListener("mouseup", mouseUpListener, false);
+        }
 		if (dragging) {
 			dragging = false;
-            window.removeEventListener("mousemove", mouseMoveListener, false);
+            if (isTouch) {
+                window.removeEventListener("touchmove", touchMoveEventListener, false);
+            }
+            else {
+                window.removeEventListener("mousemove", mouseMoveListener, false);
+            }
             if (mouseX >= EAT_AREA_X && mouseX <= EAT_AREA_X + EAT_AREA_WIDTH &&
                 mouseY >= EAT_AREA_Y && mouseY <= EAT_AREA_Y + EAT_AREA_HEIGHT) {
                 Eat();
@@ -512,9 +570,16 @@ function home(cart) {
 	}
 	
 	function Restart(){
-		window.removeEventListener("mousedown", mouseDownListener, false);
-        window.removeEventListener("mouseup", mouseUpListener, false);
-        window.removeEventListener("mousemove", mouseMoveListener, false);
+        if (isTouch) {
+            theCanvas.removeEventListener("touchstart", touchStartEventListener, false);
+            window.removeEventListener("touchend", touchEndEventListener, false);
+            window.removeEventListener("touchmove", touchMoveEventListener, false);
+        }
+        else {
+            theCanvas.removeEventListener("mousedown", mouseDownListener, false);
+            window.removeEventListener("mouseup", mouseUpListener, false);
+            window.removeEventListener("mousemove", mouseMoveListener, false);
+        }
         clearInterval(timer);
         canvasApp();
 	}

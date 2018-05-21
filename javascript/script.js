@@ -50,6 +50,13 @@ document.body.addEventListener("mousedown", function(event){
     }
 });
 
+document.body.addEventListener("touchstart", function (event) {
+    if (!gameStart) {
+        gameStart = true;
+        canvasApp();
+    }
+})
+
 var foodImages = new Map();
 
 $(function () {
