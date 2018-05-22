@@ -198,6 +198,11 @@ function home(cart) {
             clientX: touch.clientX,
             clientY: touch.clientY
         });
+        
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        
         mouseDownListener(mouseEvent);
     }
 
