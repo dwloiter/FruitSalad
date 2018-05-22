@@ -150,6 +150,11 @@ function home(cart) {
         grainProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, totalGrain, max);
         progressCurY += diffY;
         vegetableProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, totalVegetable, max);
+        
+        hungerProgressBar.vcolor = "#4169e1";
+        meatProgressBar.vcolor = "#ED4337";
+        grainProgressBar.vcolor = "#ffa500";
+        vegetableProgressBar.vcolor = "#50c878";
 
         EAT_AREA_X = 0;
         EAT_AREA_Y = 0;
@@ -385,10 +390,7 @@ function home(cart) {
         }
 		else {
 			//bg
-			context.drawImage(img, 0, 0);
-			
-			context.fillStyle = "white";
-			context.fillRect(EAT_AREA_X, EAT_AREA_Y, EAT_AREA_WIDTH, EAT_AREA_HEIGHT);
+			context.drawImage(homeBackground, 0, 0);
 			
 			if(currentDay < END_WEEK){
 				btnTomorrow.drawToContext(context);
