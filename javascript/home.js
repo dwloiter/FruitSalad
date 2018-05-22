@@ -25,6 +25,20 @@ homeBackground.src = '../images/UI/home_screen.jpg';
 
 var nextDayButton = new Image();
 nextDayButton.src = '../images/UI/next_day.png';
+
+var endWeekButton = new Image();
+endWeekButton.src = '../images/UI/end_week.png';
+
+var leaderboardButton = new Image();
+leaderboardButton.src = '../images/UI/leaderboard.png';
+
+var restartButton = new Image();
+restartButton.src = '../images/UI/restart.png';
+
+var end_screen_BG = new Image();
+end_screen_BG.src = '../images/UI/end_game_screen.png';
+
+
 function home(cart) {
 	
 	var theCanvas = document.getElementById("gameCanvas");
@@ -113,11 +127,13 @@ function home(cart) {
 		
         // create buttons
         //btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
-        btnTomorrow = new Button(theCanvas.width - 90, 300, 90, 30, null, BUTTON_TOMORROW, nextDayButton);
+        btnTomorrow = new Button(theCanvas.width - 110, 300, 110, 30, null, BUTTON_TOMORROW, nextDayButton);
 
-		btnEnd = new Button(300, 300, 100, 40, "End Week", BUTTON_END, null);
-		btnRestart = new Button(50, 430, 120, 40, "Restart", BUTTON_RESTART, null);
-		btnBoard = new Button(280, 430, 120, 40, "Leader Board", BUTTON_BOARD, null);
+		btnEnd = new Button(theCanvas.width - 110, 300, 110, 30, null, BUTTON_END, endWeekButton);
+        
+		btnRestart = new Button(50, 400, 150, 56, null, BUTTON_RESTART, restartButton);
+        
+		btnBoard = new Button(250, 400, 150, 56, null, BUTTON_BOARD, leaderboardButton);
 
         var ARROW_BTN_WIDTH = 38;
         var ARROW_BTN_HEIGHT = 108;
@@ -525,9 +541,15 @@ function home(cart) {
 	}
 	
 	function drawScore() {
-		context.fillStyle = "#FFFFFF";
+		//bg: Base
+        context.fillStyle = "#FFFFFF";
 		context.fillRect(0, 0, theCanvas.width, theCanvas.height);
-        context.fillStyle = "#000000";
+        
+        // BG iamge
+        context.drawImage(end_screen_BG, 0, 0);
+        
+        // Text
+        context.fillStyle = "#000000"; 
         context.textAlign = "left";
         context.fillText("Score: " + score, 30, 30);    
         context.fillText("Eaten Food: " + eaten, 30, 50);    
