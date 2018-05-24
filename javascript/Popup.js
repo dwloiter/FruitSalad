@@ -28,10 +28,15 @@ function Popup(width, height, bgImage) {
     this.isShow = false;
 }
 
+
 Popup.prototype.showMessage = function (theContext, message, showButton, duration, callback)
 {
     var size = theContext.measureText(message);
     this.width = size.width + POPUP_MARGIN_X;
+    if (message == "") {
+        this.width = 450;
+        this.height = 500;
+        }
     this.x = (theContext.canvas.width - this.width) / 2;
     this.y = (theContext.canvas.height - this.height) / 2;
     this.btn.x = (theContext.canvas.width - this.btn.width) / 2;
@@ -49,6 +54,28 @@ Popup.prototype.showMessage = function (theContext, message, showButton, duratio
 
     this.isShow = true;
 }
+
+/*
+Popup.prototype.showMessage = function (theContext, image, showButton, duration, callback)
+{
+    this.width = size.width + POPUP_MARGIN_X;
+    this.x = (theContext.canvas.width - this.width) / 2;
+    this.y = (theContext.canvas.height - this.height) / 2;
+    this.btn.x = (theContext.canvas.width - this.btn.width) / 2;
+    this.btn.y = (theContext.canvas.height - this.btn.height) / 2 + 20;
+
+    this.showButton = showButton;
+    this.callback = callback;
+
+    if (showButton == POPUP_NO_BTN)
+    {
+        var t = this;
+        PopupTimer = setInterval(function () { t.close(); }, duration);
+    }
+
+    this.isShow = true;
+}
+*/
 
 Popup.prototype.mouseDownListener = function (mouseX, mouseY) {
     if (this.isShow) {
@@ -80,9 +107,9 @@ Popup.prototype.drawToContext = function (theContext) {
         this.height = this.origHeight + this.btn.height + 10;
     }
 
-    if (this.image != null)
+    if (this.bgImage != null)
     {
-        theContext.drawImage(this.image, this.x, this.y, this.width, this.height);
+        theContext.drawImage(this.bgImage, this.x, this.y, this.width, this.height);
     }
     else
     {

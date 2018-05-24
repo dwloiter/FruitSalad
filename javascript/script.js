@@ -20,15 +20,31 @@ var foodDatas;
 */
 //  Main Menu display. (TEXT)
 function main_menu(){
+    
     /* Main Title */
-	context.font = "45px Courier";
-	context.fillStyle = "#653789";
+	context.font = "40px Comfortaa";
+	context.fillStyle = "#335262";
 	context.textAlign = "center";
-	context.fillText("Hunger Management", canvas.width/2, canvas.height/2);
+	context.fillText("Hunger Management", canvas.width/2, canvas.height/2 - 35);
     
     /* Instructions */
-	context.font = "15px Courier";
-	context.fillText("Tap or Click To Start", canvas.width/2, canvas.height/2 + 35);
+	context.font = "20px Comfortaa";
+	context.fillText("How To Play:", canvas.width/2, canvas.height/2 + 35);
+    
+    
+	context.font = "15px Comfortaa";
+    context.fillText("Buy enough food to last you through a week", canvas.width/2, canvas.height/2 + 55);
+    context.fillText("and choose when to eat it to raise your score.", canvas.width/2, canvas.height/2 + 75);
+    context.fillText("Be sure you eat it before it expires,", canvas.width/2, canvas.height/2 + 115);
+    context.fillText("or you'll lose points!", canvas.width/2, canvas.height/2 + 135);
+    
+    
+	context.font = "20px Comfortaa";
+    context.fillText("Tap or Click To Start", canvas.width/2, canvas.height/2 + 175);
+    context.font = "15px Courier"; //return text to normal size.
+    
+    
+     
 }
 
 /* Clear function: Clears all things on canvas when called. */

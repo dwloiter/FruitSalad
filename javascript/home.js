@@ -38,6 +38,9 @@ restartButton.src = '../images/UI/restart.png';
 var end_screen_BG = new Image();
 end_screen_BG.src = '../images/UI/end_game_screen.png';
 
+var too_full = new Image();
+too_full.src = '../images/too_full.png';
+
 
 function home(cart) {
 
@@ -179,7 +182,7 @@ function home(cart) {
         EAT_AREA_WIDTH = theCanvas.width;
         EAT_AREA_HEIGHT = 330;
 
-        popup = new Popup(10, 30, null);
+        popup = new Popup(10, 30, too_full);
 
         // draw
         drawScreen();
@@ -459,7 +462,8 @@ function home(cart) {
                 drawScreen();
 			}
 			else {
-                popup.showMessage(context, "You cannot eat more today.", POPUP_NO_BTN, 3000, drawScreen);
+                
+                popup.showMessage(context, "", POPUP_NO_BTN, 3000, drawScreen);
                 targetX = cart[dragIndex].origX;
                 targetY = cart[dragIndex].origY;
 			}
@@ -556,17 +560,15 @@ function home(cart) {
 		//bg: Base
         context.fillStyle = "#FFFFFF";
 		context.fillRect(0, 0, theCanvas.width, theCanvas.height);
-
-        // BG iamge
         context.drawImage(end_screen_BG, 0, 0);
 
         // Text
-        context.fillStyle = "#000000";
+	    context.font = "40px Comfortaa";
+        context.fillStyle = "#335262"; 
         context.textAlign = "left";
-        context.fillText("Score: " + score, 30, 30);
-        context.fillText("Eaten Food: " + eaten, 30, 50);
-        context.fillText("Wasted Food: " + wasted, 30, 70);
-
+        context.fillText("Final Score: " + score, 35, 120);    
+        context.fillText("Eaten Food: " + eaten, 35, 220);    
+        context.fillText("Wasted Food: " + wasted, 35, 320);
 		btnRestart.drawToContext(context);
 		btnBoard.drawToContext(context);
     }
@@ -605,7 +607,7 @@ function home(cart) {
 	function Notice(){
 		if(totalHunger < 10){
 			var img2 =  new Image();
-			img2.src = '../images/shelf.jpg';f
+			img2.src = '../images/shelf.jpg';
 			context.drawImage(img2, 0, 0, theCanvas.width, theCanvas.height);
 		}
 	}

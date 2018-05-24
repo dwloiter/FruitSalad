@@ -69,7 +69,7 @@ function canvasApp() {
         numShapes = 6;
         curPage = 0;
         easeAmount = 0.450;
-		budget = 200;
+		budget = 400;
         totalPrice = 0;
 
         dragIndex = -1;
@@ -482,8 +482,10 @@ function canvasApp() {
 	}
 	
 	function drawTotal() {		
-		context.fillText("totalPrice:" + totalPrice, 200, 10)
-		context.fillText("budget:" + budget, 200, 20)
+	    context.font = "22px Comfortaa";
+        context.fillStyle = "#FFF";
+		context.fillText("Cart Total: " + totalPrice, 70, 320);
+		context.fillText("Max Budget: " + budget, 270, 320);
     }
     
     function drawInfo() {
