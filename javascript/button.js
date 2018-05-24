@@ -21,12 +21,14 @@ function Button(posX, posY, width, height, message, value, image)
     this.message = message;
     this.value = value;
 	
-	this.sound = defaultSound;
+    this.sound = defaultSound;
+
+    this.enabled = true;
 }
 
 Button.prototype.mouseDownListener = function (mouseX, mouseY)
 {
-    if (mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height)
+    if (this.enabled && mouseX > this.x && mouseX < this.x + this.width && mouseY > this.y && mouseY < this.y + this.height)
     {
 		//play sound 
 		this.sound.play();
@@ -40,6 +42,10 @@ Button.prototype.mouseDownListener = function (mouseX, mouseY)
 // draw button
 Button.prototype.drawToContext = function (theContext)
 {
+    if (!this.enabled) {
+        return;
+    }
+
     if (this.image != null)
     {
         theContext.drawImage(this.image, this.x, this.y, this.width, this.height);

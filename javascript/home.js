@@ -144,6 +144,8 @@ function home(cart) {
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
         btnCartRight = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
+        
+        AutoHideCartBtn();
 
         // TODO: test
         // need to set 0
@@ -573,6 +575,8 @@ function home(cart) {
 		if(currentPage > 0){
 			currentPage--;
         }
+        
+        AutoHideCartBtn();
 
         cartStartIndex = currentPage * numCartItems;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
@@ -585,12 +589,19 @@ function home(cart) {
 			currentPage++;
 		}
 
+        AutoHideCartBtn();
+        
         cartStartIndex = currentPage * numCartItems;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
         drawScreen();
     }
-
+    
+    function AutoHideCartBtn() {
+        btnCartLeft.enabled = currentPage != 0;
+        btnCartRight.enabled = cart.length != 0 && currentPage != Math.floor((cart.length - 1) / numCartItems);
+    }
+	
 	function Notice(){
 		if(totalHunger < 10){
 			var img2 =  new Image();

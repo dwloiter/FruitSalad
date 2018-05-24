@@ -106,13 +106,16 @@ function canvasApp() {
 
         btnCartLeft = new Button(ARROW_DIFF_X, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_LEFT, leftImg);
+        btnCartLeft.enabled = false;
         btnCartRight = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, CART_ARROW_Y - ARROW_BTN_HEIGHT / 2,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_CART_RIGHT, rightImg);
+        btnCartRight.enabled = false;
 
         var SHOP_ARROW_Y = 100;
 			
         btnPrev = new Button(ARROW_DIFF_X, SHOP_ARROW_Y,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_PREV, leftImg);
+        btnPrev.enabled = false;
         btnNext = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, SHOP_ARROW_Y,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_NEXT, rightImg);
         
@@ -547,6 +550,8 @@ function canvasApp() {
             cartStartIndex = currentPage * numCartItems;
             cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
         }
+
+		AutoHideCartBtn();
     }
 
     function isInCart(x, y) {
@@ -570,6 +575,8 @@ function canvasApp() {
         if (cartMaxItem == 0) {
             CartLeft();
         }
+        
+        AutoHideCartBtn();
         clearInterval(timer);
         drawScreen();
     }
@@ -593,6 +600,8 @@ function canvasApp() {
 		if(currentPage > 0){
 			currentPage--;
 		}
+        
+        AutoHideCartBtn();
 
         cartStartIndex = currentPage * numCartItems;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
@@ -604,18 +613,25 @@ function canvasApp() {
         if (currentPage != Math.floor((cart.length - 1) / numCartItems)) {
 			currentPage++;
 		}
+        
+        AutoHideCartBtn();
 
         cartStartIndex = currentPage * numCartItems;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
 		drawScreen();
-    }	
-  
+    }
+    
+    function AutoHideCartBtn() {
+        btnCartLeft.enabled = currentPage != 0;
+        btnCartRight.enabled = cart.length != 0 && currentPage != Math.floor((cart.length - 1) / numCartItems);
+    }
 
     function GoPrev() {
         if (curPage > 0) {
             curPage--;
         }
+        AutoHideShopBtn();
         drawScreen();
     }
 
@@ -623,7 +639,13 @@ function canvasApp() {
         if (curPage != Math.floor((shapes.length - 1) / numShapes)) {
             curPage++;
         }
+        AutoHideShopBtn();
         drawScreen();
+    }
+    
+    function AutoHideShopBtn() {
+        btnPrev.enabled = curPage != 0;
+        btnNext.enabled = curPage != Math.floor((shapes.length - 1) / numShapes);
     }
     
     function ToggleInfo(){
