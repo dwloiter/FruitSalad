@@ -8,6 +8,7 @@ class FoodData
     public $Meat;
     public $Grain;
     public $Vegetable;
+	public $Expiration;
 }
 
 // load credentials
