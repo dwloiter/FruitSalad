@@ -2,26 +2,26 @@
 //The basic setup here, including the debugging code and window load listener, is copied from 'HTML5 Canvas' by Fulton & Fulton.
 
 leftImg.src = '../images/UI/left.png';
-rightImg.src = '../images/UI/right.png'; 
+rightImg.src = '../images/UI/right.png';
 
 var day1Image = new Image();
-day1Image.src = '../images/UI/day_1.png'; 
+day1Image.src = '../images/UI/day_1.png';
 var day2Image = new Image();
-day2Image.src = '../images/UI/day_2.png'; 
+day2Image.src = '../images/UI/day_2.png';
 var day3Image = new Image();
-day3Image.src = '../images/UI/day_3.png'; 
+day3Image.src = '../images/UI/day_3.png';
 var day4Image = new Image();
-day4Image.src = '../images/UI/day_4.png'; 
+day4Image.src = '../images/UI/day_4.png';
 var day5Image = new Image();
-day5Image.src = '../images/UI/day_5.png'; 
+day5Image.src = '../images/UI/day_5.png';
 var day6Image = new Image();
-day6Image.src = '../images/UI/day_6.png'; 
+day6Image.src = '../images/UI/day_6.png';
 var day7Image = new Image();
-day7Image.src = '../images/UI/day_7.png'; 
+day7Image.src = '../images/UI/day_7.png';
 
 
 var homeBackground = new Image();
-homeBackground.src = '../images/UI/home_screen.jpg'; 
+homeBackground.src = '../images/UI/home_screen.jpg';
 
 var nextDayButton = new Image();
 nextDayButton.src = '../images/UI/next_day.png';
@@ -40,14 +40,14 @@ end_screen_BG.src = '../images/UI/end_game_screen.png';
 
 
 function home(cart) {
-	
+
 	var theCanvas = document.getElementById("gameCanvas");
 	var context = theCanvas.getContext("2d");
-	
+
 	init();
-    
+
   var currentDay;
-	
+
 	var dragIndex;
 	var dragging;
 	var mouseX;
@@ -71,7 +71,7 @@ function home(cart) {
     var EAT_AREA_Y;
     var EAT_AREA_WIDTH;
     var EAT_AREA_HEIGHT;
-	
+
 	var MAX_HUNGER = 100;
 	var END_WEEK;
 	var DEDUCT_SCORE;
@@ -90,7 +90,7 @@ function home(cart) {
 
     var cartMaxItem;
     var cartStartIndex;
-	
+
 	var score;
 	var end;
 	var wasted;
@@ -111,10 +111,10 @@ function home(cart) {
 
 		currentDay = 0;
 		END_WEEK = 6;
-	
+
 		score = 0;
 		DEDUCT_SCORE = 10;
-        
+
 		cartStartIndex = 0;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
@@ -124,15 +124,15 @@ function home(cart) {
 		BUTTON_END = 4;
 		BUTTON_RESTART = 5;
 		BUTTON_BOARD = 6;
-		
+
         // create buttons
         //btnTomorrow = new Button(300, 300, 100, 40, "Tomorrow", BUTTON_TOMORROW, null);
         btnTomorrow = new Button(theCanvas.width - 110, 300, 110, 30, null, BUTTON_TOMORROW, nextDayButton);
 
 		btnEnd = new Button(theCanvas.width - 110, 300, 110, 30, null, BUTTON_END, endWeekButton);
-        
+
 		btnRestart = new Button(50, 400, 150, 56, null, BUTTON_RESTART, restartButton);
-        
+
 		btnBoard = new Button(250, 400, 150, 56, null, BUTTON_BOARD, leaderboardButton);
 
         var ARROW_BTN_WIDTH = 38;
@@ -166,7 +166,7 @@ function home(cart) {
         grainProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, totalGrain, max);
         progressCurY += diffY;
         vegetableProgressBar = new ProgressBar(progressX, progressCurY, progressWidth, progressHeight, totalVegetable, max);
-        
+
         hungerProgressBar.vcolor = "#4169e1";
         meatProgressBar.vcolor = "#ED4337";
         grainProgressBar.vcolor = "#ffa500";
@@ -198,11 +198,11 @@ function home(cart) {
             clientX: touch.clientX,
             clientY: touch.clientY
         });
-        
+
         if (event.preventDefault) {
             event.preventDefault();
         }
-        
+
         mouseDownListener(mouseEvent);
     }
 
@@ -223,12 +223,12 @@ function home(cart) {
         });
         mouseMoveListener(mouseEvent);
     }
-	
+
 	//MouseDown
 	function mouseDownListener(evt) {
 		var i;
-		
-		//getting mouse position correctly 
+
+		//getting mouse position correctly
 		var bRect = theCanvas.getBoundingClientRect();
 		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
 		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
@@ -249,10 +249,10 @@ function home(cart) {
 			/*
 			Below, we find if a shape was clicked. Since a "hit" on a square or a circle has to be measured differently, the
 			hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
-			for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
+			for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.
 			*/
 			for (i = 0; i < cartMaxItem; i++) {
-				if (cart[i + cartStartIndex].hitTest(mouseX, mouseY)) {	
+				if (cart[i + cartStartIndex].hitTest(mouseX, mouseY)) {
 					dragging = true;
 					//the following variable will be reset if this loop repeats with another successful hit:
 					dragIndex = i + cartStartIndex;
@@ -265,16 +265,16 @@ function home(cart) {
                 else {
                     window.addEventListener("mousemove", mouseMoveListener, false);
                 }
-				
+
 				//shapeto drag is now last one in array
 				dragHoldX = mouseX - cart[dragIndex].x;
 				dragHoldY = mouseY - cart[dragIndex].y;
-				
+
 				//The "target" position is where the object should be if it were to move there instantaneously. But we will
 				//set up the code so that this target position is approached gradually, producing a smooth motion.
 				targetX = mouseX - dragHoldX;
 				targetY = mouseY - dragHoldY;
-				
+
 				//start timer
                 if (timer != null) {
                     clearInterval(timer);
@@ -287,7 +287,7 @@ function home(cart) {
 			else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
 				CartRight();
 			}
-			
+
 			if(currentDay < END_WEEK){
 				if (btnTomorrow.mouseDownListener(mouseX, mouseY)) {
 				   GoTomorrow();
@@ -308,7 +308,7 @@ function home(cart) {
             theCanvas.removeEventListener("mousedown", mouseDownListener, false);
             window.addEventListener("mouseup", mouseUpListener, false);
         }
-		
+
 		//code below prevents the mouse down from having an effect on the main browser window:
 		if (evt.preventDefault) {
 			evt.preventDefault();
@@ -318,26 +318,26 @@ function home(cart) {
 		} //older IE
 		return false;
 	}
-	
+
 	function onTimerTick() {
 		if (dragIndex != -1) {
 			//because of reordering, the dragging shape is the last one in the array.
 			cart[dragIndex].x = cart[dragIndex].x + easeAmount * (targetX - cart[dragIndex].x);
 			cart[dragIndex].y = cart[dragIndex].y + easeAmount * (targetY - cart[dragIndex].y);
-			
+
 			//stop the timer when the target position is reached (close enough)
 			if ((!dragging) && (Math.abs(cart[dragIndex].x - targetX) < 0.1) && (Math.abs(cart[dragIndex].y - targetY) < 0.1)) {
 				cart[dragIndex].x = targetX;
 				cart[dragIndex].y = targetY;
 				//stop timer:
 				clearInterval(timer);
-                
+
                 dragIndex = -1;
 			}
         }
 		drawScreen();
 	}
-	
+
 	function mouseUpListener(evt) {
         if (isTouch) {
             theCanvas.addEventListener("touchstart", touchStartEventListener, false);
@@ -374,21 +374,21 @@ function home(cart) {
         var minY = cart[dragIndex].height / 2;
         var maxY = theCanvas.height - cart[dragIndex].height / 2;
 
-		//getting mouse position correctly 
+		//getting mouse position correctly
 		var bRect = theCanvas.getBoundingClientRect();
 		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
 		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
-		
+
 		//clamp x and y positions to prevent object from dragging outside of canvas
 		posX = mouseX - dragHoldX;
 		posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
 		posY = mouseY - dragHoldY;
 		posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
-		
+
 		targetX = posX;
 		targetY = posY;
 	}
-		
+
     function drawCart() {
 		var i;
         for (i = 0; i < cartMaxItem; ++i) {
@@ -403,7 +403,7 @@ function home(cart) {
             cart[dragIndex].drawToContext(context);
         }
 	}
-	
+
 	function drawScreen() {
 
         if (end) {
@@ -412,25 +412,25 @@ function home(cart) {
 		else {
 			//bg
 			context.drawImage(homeBackground, 0, 0);
-			
+
 			if(currentDay < END_WEEK){
 				btnTomorrow.drawToContext(context);
 			}
 			else {
 				btnEnd.drawToContext(context);
 			}
-			
+
 			btnCartLeft.drawToContext(context);
 			btnCartRight.drawToContext(context);
-			
-	
+
+
 			hungerProgressBar.drawToContext(context);
 			meatProgressBar.drawToContext(context);
 			grainProgressBar.drawToContext(context);
 			vegetableProgressBar.drawToContext(context);
 
 			dayDisplay(currentDay);
-			
+
 			if (cart != null) {
 				drawCart();
 			}
@@ -462,9 +462,9 @@ function home(cart) {
                 targetY = cart[dragIndex].origY;
 			}
 		}
-		
+
     }
-    
+
     function GoTomorrow() {
 		calScore();
 		hungerProgressBar.current = 0;
@@ -472,7 +472,7 @@ function home(cart) {
 		grainProgressBar.current = 0;
 		vegetableProgressBar.current = 0;
 		currentDay++;
-		
+
 		var i;
 		while(i < cart.length){
 			cart[i].foodData.Expiration--;
@@ -484,14 +484,14 @@ function home(cart) {
 				i++;
 			}
 		}
-		
+
         drawScreen();
 	}
-	
+
 	function calScore(){
-		score += hungerProgressBar.current + meatProgressBar.current + vegetableProgressBar.current + grainProgressBar.current;	
+		score += hungerProgressBar.current + meatProgressBar.current + vegetableProgressBar.current + grainProgressBar.current;
 	}
-	
+
     function dayDisplay(currentDay) {
         switch (currentDay) {
             case 1:
@@ -510,25 +510,25 @@ function home(cart) {
                 context.drawImage(day6Image,theCanvas.width - 60, 10, 50, 25);
                 break;
             case 6:
-                context.drawImage(day7Image,theCanvas.width - 60, 10, 50, 25); 
+                context.drawImage(day7Image,theCanvas.width - 60, 10, 50, 25);
                 break;
             default:
                 context.drawImage(day1Image,theCanvas.width - 60, 10, 50, 25);
                 break;
-        }  
+        }
     }
-	
+
 	function End(){
 		end = !end;
         if (!end) {
             var INFO_BTN_WIDTH = 100;
             var INFO_BTN_HEIGHT = 40;
-            
+
             btnEnd.x = theCanvas.width - INFO_BTN_WIDTH;
             btnEnd.width = INFO_BTN_WIDTH;
             btnEnd.height = INFO_BTN_HEIGHT;
 			btnEnd.message = "End";
-			
+
         }
         else {
             btnEnd.x = 0;
@@ -536,34 +536,39 @@ function home(cart) {
             btnEnd.height = theCanvas.height;
             btnEnd.message = "";
         }
-		
+
 		var i;
 		for(i = 0; i < cart.length; i++){
 			wasted++;
 		}
-		
+			$.ajax({
+	        type: "POST",
+	        url: '../php/score.php',
+	        data: { score : score }
+
+	    });
         drawScreen();
 	}
-	
+
 	function drawScore() {
 		//bg: Base
         context.fillStyle = "#FFFFFF";
 		context.fillRect(0, 0, theCanvas.width, theCanvas.height);
-        
+
         // BG iamge
         context.drawImage(end_screen_BG, 0, 0);
-        
+
         // Text
-        context.fillStyle = "#000000"; 
+        context.fillStyle = "#000000";
         context.textAlign = "left";
-        context.fillText("Score: " + score, 30, 30);    
-        context.fillText("Eaten Food: " + eaten, 30, 50);    
+        context.fillText("Score: " + score, 30, 30);
+        context.fillText("Eaten Food: " + eaten, 30, 50);
         context.fillText("Wasted Food: " + wasted, 30, 70);
-		
+
 		btnRestart.drawToContext(context);
 		btnBoard.drawToContext(context);
     }
-	
+
     function CartLeft() {
 		if(currentPage > 0){
 			currentPage--;
@@ -585,7 +590,7 @@ function home(cart) {
 
         drawScreen();
     }
-	
+
 	function Notice(){
 		if(totalHunger < 10){
 			var img2 =  new Image();
@@ -593,11 +598,11 @@ function home(cart) {
 			context.drawImage(img2, 0, 0, theCanvas.width, theCanvas.height);
 		}
 	}
-	
+
 	function Board(){
 		window.location.href= '../html/leaderboard.html';
 	}
-	
+
 	function Restart(){
         if (isTouch) {
             theCanvas.removeEventListener("touchstart", touchStartEventListener, false);

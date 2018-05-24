@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 }
 
 $sql = "UPDATE `user` SET `score`= ". $score . " WHERE name = \"" . $_SESSION["username"] . "\"
-        AND score < ". $score .";";
+        AND (score is NULL OR score < ". $score .");";
 
 $result = $conn->query($sql);
 $conn->close();
