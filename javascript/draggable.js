@@ -33,7 +33,8 @@ function canvasApp() {
 	var targetY;
     var easeAmount;
 	var cart = [];
-	var currentPage;
+    var currentPage;
+    var cartPageOrig;
 
     var BUTTON_GO_HOME;
     var BUTTON_CART_LEFT;
@@ -264,7 +265,9 @@ function canvasApp() {
             if (timer != null) {
                 clearInterval(timer);
             }
-			timer = setInterval(onTimerTick, 1000/30);
+            timer = setInterval(onTimerTick, 1000 / 30);
+
+            cartPageOrig = currentPage;
         }
         else if (cartDragging) {
             if (isTouch) {
@@ -339,6 +342,18 @@ function canvasApp() {
                 clearInterval(timer);
 
                 dragIndex = -1;
+            }
+            else if (dragging) {
+                if (isInCart(shapes[dragIndex].x, shapes[dragIndex].y)) {
+                    currentPage = Math.floor(cart.length / numCartItems);
+                    cartStartIndex = currentPage * numCartItems;
+                    cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+                }
+                else {
+                    currentPage = cartPageOrig;
+                    cartStartIndex = currentPage * numCartItems;
+                    cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+                }
             }
         }
         else if (cartDragIndex != -1) {
@@ -510,7 +525,7 @@ function canvasApp() {
 		else{
 			price = shapes[dragIndex].foodData.Price;
 		}
-        if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
+        if (isInCart(mouseX, mouseY)) {
             if (budget >= totalPrice + price) {
                 var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[dragIndex].foodData);
                 // need to copy values
@@ -526,7 +541,16 @@ function canvasApp() {
             else {
                 popup.showMessage(context, "It exceeds budget.", POPUP_NO_BTN, 3000, drawScreen);
             }
-		}
+        }
+        else {
+            currentPage = cartPageOrig;
+            cartStartIndex = currentPage * numCartItems;
+            cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
+        }
+    }
+
+    function isInCart(x, y) {
+        return x >= 0 && y >= 370 && y < theCanvas.height;
     }
 
     function removeFromCart() {
