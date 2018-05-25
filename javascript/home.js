@@ -479,7 +479,7 @@ function home(cart) {
 		vegetableProgressBar.current = 0;
 		currentDay++;
 
-		var i;
+		var i = 0;
 		while(i < cart.length){
 			cart[i].foodData.Expiration--;
 			if(cart[i].foodData.Expiration <= 0){
