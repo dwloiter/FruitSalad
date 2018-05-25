@@ -13,6 +13,9 @@ informationButton.src = "../images/UI/information_button.png";
 var informationScreen = new Image();
 informationScreen.src = "../images/UI/information.png";
 
+var no_money = new Image();
+no_money.src = "../images/no_money.png";
+
 function canvasApp() {
 	
 	var theCanvas = document.getElementById("gameCanvas");
@@ -124,7 +127,7 @@ function canvasApp() {
         
         btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0, INFO_BTN_WIDTH, INFO_BTN_HEIGHT, null, BUTTON_INFO, informationButton);
 
-        popup = new Popup(10, 30, null);
+        popup = new Popup(10, 30, no_money);
         
         // draw
         drawScreen();
@@ -485,7 +488,7 @@ function canvasApp() {
 	    context.font = "22px Comfortaa";
         context.fillStyle = "#FFF";
         context.textAlign = "left";
-		context.fillText("Cart Total: " + totalPrice, 0, 320);
+		context.fillText("Cart Total: " + totalPrice, 15, 320);
 		context.fillText("Max Budget: " + budget, 170, 320);
     }
     
@@ -545,7 +548,7 @@ function canvasApp() {
                 cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
             }
             else {
-                popup.showMessage(context, "It exceeds budget.", POPUP_NO_BTN, 3000, drawScreen);
+                popup.showMessage(context, "", POPUP_NO_BTN, 3750, drawScreen);
             }
         }
         else {
