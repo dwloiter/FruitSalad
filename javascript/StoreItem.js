@@ -25,6 +25,8 @@ function StoreItem(posX, posY, width, height, foodData) {
     }
     else {
         this.hunger = 25;
+        this.price = 20;
+        this.expiration = Math.floor(Math.random() * 7);
 
         switch (Math.floor(Math.random() * 3)) {
             case 1:
@@ -107,10 +109,18 @@ StoreItem.prototype.drawToContext = function (theContext) {
     this.grainProgressBar.drawToContext(theContext);
     this.vegetableProgressBar.drawToContext(theContext);
 
+    theContext.font = "12px Comfortaa";
+    theContext.fillStyle = "#FFF";
+    theContext.textAlign = "left";
+
     if (this.name == null) {
         theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
+        theContext.fillText("Price: " + this.price, this.x + 0, this.y + 0);
+        theContext.fillText("Expiration: " + this.expiration, this.x + 0, this.y + 15);
     }
     else {
         theContext.drawImage(foodImages.get(this.name), this.x, this.y, this.width, this.height);
+        theContext.fillText("Price: " + this.foodData.Price, this.x + 0, this.y + 0);
+        theContext.fillText("Expiration: " + this.foodData.Expiration, this.x + 0, this.y + 15);
     }
 }
