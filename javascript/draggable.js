@@ -488,8 +488,8 @@ function canvasApp() {
 	    context.font = "22px Comfortaa";
         context.fillStyle = "#FFF";
         context.textAlign = "left";
-		context.fillText("Cart Total: " + totalPrice, 15, 320);
-		context.fillText("Max Budget: " + budget, 170, 320);
+		context.fillText("Cart Total: " + totalPrice, 85, 320);
+		context.fillText("Max Budget: " + budget, 270, 320);
     }
     
     function drawInfo() {
