@@ -2,7 +2,7 @@
 session_start();
 
 // get user
-$username = $_POST["uname"];
+$username = $_POST["uname"]; 
 $password = md5($_POST["psw"]);
 
 $dbservername = "localhost";

@@ -4,9 +4,9 @@
 var leftImg = new Image();
 leftImg.src = '../images/UI/left.png';
 var rightImg = new Image();
-rightImg.src = '../images/UI/right.png'; 
+rightImg.src = '../images/UI/right.png';
 var homeButton = new Image();
-homeButton.src = '../images/UI/home_button.png'; 
+homeButton.src = '../images/UI/home_button.png';
 
 var informationButton = new Image();
 informationButton.src = "../images/UI/information_button.png";
@@ -17,41 +17,41 @@ var no_money = new Image();
 no_money.src = "../images/no_money.png";
 
 function canvasApp() {
-	
-	var theCanvas = document.getElementById("gameCanvas");
-	var context = theCanvas.getContext("2d");
-	
-	init();
-	
-	var numShapes;
-	var shapes;
-	var dragIndex;
-	var dragging;
-	var mouseX;
-	var mouseY;
-	var dragHoldX;
-	var dragHoldY;
-	var timer;
-	var targetX;
-	var targetY;
+
+    var theCanvas = document.getElementById("gameCanvas");
+    var context = theCanvas.getContext("2d");
+
+    init();
+
+    var numShapes;
+    var shapes;
+    var dragIndex;
+    var dragging;
+    var mouseX;
+    var mouseY;
+    var dragHoldX;
+    var dragHoldY;
+    var timer;
+    var targetX;
+    var targetY;
     var easeAmount;
-	var cart = [];
+    var cart = [];
     var currentPage;
     var cartPageOrig;
 
     var BUTTON_GO_HOME;
     var BUTTON_CART_LEFT;
     var BUTTON_CART_RIGHT;
-	var BUTTON_NEXT;
-	var BUTTON_PREV;
+    var BUTTON_NEXT;
+    var BUTTON_PREV;
     var BUTTON_INFO;
 
     var btnGoHome;
-	
-	var curPage;
 
-	var budget;
-	var totalPrice;
+    var curPage;
+
+    var budget;
+    var totalPrice;
 
     var cartMaxItem;
     var cartStartIndex;
@@ -67,12 +67,12 @@ function canvasApp() {
     var popup;
 
     var isTouch;
-	
-	function init() {
+
+    function init() {
         numShapes = 6;
         curPage = 0;
         easeAmount = 0.450;
-		budget = 400;
+        budget = 400;
         totalPrice = 0;
 
         dragIndex = -1;
@@ -91,11 +91,11 @@ function canvasApp() {
         BUTTON_NEXT = 4;
         BUTTON_PREV = 5;
         BUTTON_INFO = 6;
-        
+
         showInfo = false;
-		
-		shapes = [];
-		
+
+        shapes = [];
+
         makeShapes();
 
         // create buttons
@@ -115,20 +115,20 @@ function canvasApp() {
         btnCartRight.enabled = false;
 
         var SHOP_ARROW_Y = 100;
-			
+
         btnPrev = new Button(ARROW_DIFF_X, SHOP_ARROW_Y,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_PREV, leftImg);
         btnPrev.enabled = false;
         btnNext = new Button(theCanvas.width - ARROW_DIFF_X - ARROW_BTN_WIDTH, SHOP_ARROW_Y,
             ARROW_BTN_WIDTH, ARROW_BTN_HEIGHT, null, BUTTON_NEXT, rightImg);
-        
+
         var INFO_BTN_WIDTH = 40;
         var INFO_BTN_HEIGHT = 40;
-        
+
         btnInfo = new Button(theCanvas.width - INFO_BTN_WIDTH, 0, INFO_BTN_WIDTH, INFO_BTN_HEIGHT, null, BUTTON_INFO, informationButton);
 
         popup = new Popup(10, 30, no_money);
-        
+
         // draw
         drawScreen();
 
@@ -136,8 +136,7 @@ function canvasApp() {
 
         if (isTouch) {
             theCanvas.addEventListener("touchstart", touchStartEventListener, false);
-        }
-        else {
+        } else {
             theCanvas.addEventListener("mousedown", mouseDownListener, false);
         }
     }
@@ -148,11 +147,11 @@ function canvasApp() {
             clientX: touch.clientX,
             clientY: touch.clientY
         });
-        
+
         if (event.preventDefault) {
             event.preventDefault();
         }
-        
+
         mouseDownListener(mouseEvent);
     }
 
@@ -174,11 +173,11 @@ function canvasApp() {
         mouseMoveListener(mouseEvent);
     }
 
-	function makeShapes() {
+    function makeShapes() {
 
         var i;
-		var startX = 30;
-		var startY = 30;
+        var startX = 30;
+        var startY = 30;
         var width = 80;
         var height = 80;
         var diffX = 150;
@@ -195,8 +194,7 @@ function canvasApp() {
 
                 shapes.push(tempShape);
             }
-        }
-        else {
+        } else {
             for (i = 0; i < 25; i++) {
                 var index = i % numShapes;
                 var tempX = startX + diffX * (index % rowItemCount);
@@ -207,35 +205,35 @@ function canvasApp() {
                 shapes.push(tempShape);
             }
         }
-	}
-	
+    }
+
     function mouseDownListener(evt) {
-		var i;
-		
-		//getting mouse position correctly 
-		var bRect = theCanvas.getBoundingClientRect();
-		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
-		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
+        var i;
+
+        //getting mouse position correctly 
+        var bRect = theCanvas.getBoundingClientRect();
+        mouseX = (evt.clientX - bRect.left) * (theCanvas.width / bRect.width);
+        mouseY = (evt.clientY - bRect.top) * (theCanvas.height / bRect.height);
 
         if (popup.isShow && popup.mouseDownListener(mouseX, mouseY)) {
             return false;
         }
 
-		/*
-		Below, we find if a shape was clicked. Since a "hit" on a square or a circle has to be measured differently, the
-		hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
-		for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
-		*/
+        /*
+        Below, we find if a shape was clicked. Since a "hit" on a square or a circle has to be measured differently, the
+        hit test is done using the hitTest() function associated to the type of particle. This function is an instance method
+        for both the SimpleDiskParticle and SimpleSqureParticle classes we have defined with the external JavaScript sources.		
+        */
         var startIndex = curPage * numShapes;
         var max = Math.min(numShapes, shapes.length - startIndex);
         for (i = 0; i < max; i++) {
-            if (shapes[i + startIndex].hitTest(mouseX, mouseY)) {	
-				dragging = true;
-				//the following variable will be reset if this loop repeats with another successful hit:
+            if (shapes[i + startIndex].hitTest(mouseX, mouseY)) {
+                dragging = true;
+                //the following variable will be reset if this loop repeats with another successful hit:
                 dragIndex = i + startIndex;
                 break;
-			}
-		}
+            }
+        }
 
         max = Math.min(cartMaxItem, cart.length - cartStartIndex);
         for (i = 0; i < cartMaxItem; ++i) {
@@ -246,40 +244,36 @@ function canvasApp() {
                 break;
             }
         }
-		
-        if (btnInfo.mouseDownListener(mouseX, mouseY)){
+
+        if (btnInfo.mouseDownListener(mouseX, mouseY)) {
             ToggleInfo();
-        }
-		else if (dragging) {
+        } else if (dragging) {
             if (isTouch) {
                 window.addEventListener("touchmove", touchMoveEventListener, false);
-            }
-            else {
+            } else {
                 window.addEventListener("mousemove", mouseMoveListener, false);
             }
-			
-			//shapeto drag is now last one in array
-			dragHoldX = mouseX - shapes[dragIndex].x;
-			dragHoldY = mouseY - shapes[dragIndex].y;
-			
-			//The "target" position is where the object should be if it were to move there instantaneously. But we will
-			//set up the code so that this target position is approached gradually, producing a smooth motion.
-			targetX = mouseX - dragHoldX;
-			targetY = mouseY - dragHoldY;
 
-			//start timer
+            //shapeto drag is now last one in array
+            dragHoldX = mouseX - shapes[dragIndex].x;
+            dragHoldY = mouseY - shapes[dragIndex].y;
+
+            //The "target" position is where the object should be if it were to move there instantaneously. But we will
+            //set up the code so that this target position is approached gradually, producing a smooth motion.
+            targetX = mouseX - dragHoldX;
+            targetY = mouseY - dragHoldY;
+
+            //start timer
             if (timer != null) {
                 clearInterval(timer);
             }
             timer = setInterval(onTimerTick, 1000 / 30);
 
             cartPageOrig = currentPage;
-        }
-        else if (cartDragging) {
+        } else if (cartDragging) {
             if (isTouch) {
                 window.addEventListener("touchmove", touchMoveEventListener, false);
-            }
-            else {
+            } else {
                 window.addEventListener("mousemove", mouseMoveListener, false);
             }
 
@@ -297,25 +291,20 @@ function canvasApp() {
                 clearInterval(timer);
             }
             timer = setInterval(onTimerTick, 1000 / 30);
-        }
-        else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
+        } else if (btnCartLeft.mouseDownListener(mouseX, mouseY)) {
             CartLeft();
-        }
-        else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
+        } else if (btnCartRight.mouseDownListener(mouseX, mouseY)) {
             CartRight();
-        }
-		else if (btnNext.mouseDownListener(mouseX, mouseY)) {
+        } else if (btnNext.mouseDownListener(mouseX, mouseY)) {
             GoNext();
-        }
-		else if (btnPrev.mouseDownListener(mouseX, mouseY)) {
+        } else if (btnPrev.mouseDownListener(mouseX, mouseY)) {
             GoPrev();
         }
 
         if (isTouch) {
             theCanvas.removeEventListener("touchstart", touchStartEventListener, false);
             window.addEventListener("touchend", touchEndEventListener, false);
-        }
-        else {
+        } else {
             theCanvas.removeEventListener("mousedown", mouseDownListener, false);
             window.addEventListener("mouseup", mouseUpListener, false);
         }
@@ -323,17 +312,17 @@ function canvasApp() {
         if (btnGoHome.mouseDownListener(mouseX, mouseY)) {
             GoHome();
         }
-		
-		//code below prevents the mouse down from having an effect on the main browser window:
-		if (evt.preventDefault) {
-			evt.preventDefault();
-		} //standard
-		else if (evt.returnValue) {
-			evt.returnValue = false;
-		} //older IE
-		return false;
-	}
-	
+
+        //code below prevents the mouse down from having an effect on the main browser window:
+        if (evt.preventDefault) {
+            evt.preventDefault();
+        } //standard
+        else if (evt.returnValue) {
+            evt.returnValue = false;
+        } //older IE
+        return false;
+    }
+
     function onTimerTick() {
         if (dragIndex != -1) {
             //because of reordering, the dragging shape is the last one in the array.
@@ -348,21 +337,18 @@ function canvasApp() {
                 clearInterval(timer);
 
                 dragIndex = -1;
-            }
-            else if (dragging) {
+            } else if (dragging) {
                 if (isInCart(shapes[dragIndex].x, shapes[dragIndex].y)) {
                     currentPage = Math.floor(cart.length / numCartItems);
                     cartStartIndex = currentPage * numCartItems;
                     cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
-                }
-                else {
+                } else {
                     currentPage = cartPageOrig;
                     cartStartIndex = currentPage * numCartItems;
                     cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
                 }
             }
-        }
-        else if (cartDragIndex != -1) {
+        } else if (cartDragIndex != -1) {
             //because of reordering, the dragging shape is the last one in the array.
             cart[cartDragIndex].x = cart[cartDragIndex].x + easeAmount * (cartTargetX - cart[cartDragIndex].x);
             cart[cartDragIndex].y = cart[cartDragIndex].y + easeAmount * (cartTargetY - cart[cartDragIndex].y);
@@ -378,28 +364,26 @@ function canvasApp() {
             }
         }
 
-		drawScreen();
-	}
-	
-	function mouseUpListener(evt) {
+        drawScreen();
+    }
+
+    function mouseUpListener(evt) {
         if (isTouch) {
             theCanvas.addEventListener("touchstart", touchStartEventListener, false);
             window.removeEventListener("touchend", touchEndEventListener, false);
-        }
-        else {
+        } else {
             theCanvas.addEventListener("mousedown", mouseDownListener, false);
             window.removeEventListener("mouseup", mouseUpListener, false);
         }
-		if (dragging) {
-			dragging = false;
+        if (dragging) {
+            dragging = false;
             if (isTouch) {
                 window.removeEventListener("touchmove", touchMoveEventListener, false);
-            }
-            else {
+            } else {
                 window.removeEventListener("mousemove", mouseMoveListener, false);
             }
             getShapes();
-			targetX = shapes[dragIndex].origX;
+            targetX = shapes[dragIndex].origX;
             targetY = shapes[dragIndex].origY;
         }
 
@@ -407,40 +391,38 @@ function canvasApp() {
             cartDragging = false;
             if (isTouch) {
                 window.removeEventListener("touchmove", touchMoveEventListener, false);
-            }
-            else {
+            } else {
                 window.removeEventListener("mousemove", mouseMoveListener, false);
             }
             if (mouseX >= 0 && mouseY >= 370 && mouseY < theCanvas.height) {
                 cartTargetX = cart[cartDragIndex].origX;
                 cartTargetY = cart[cartDragIndex].origY;
-            }
-            else {
+            } else {
                 removeFromCart();
             }
         }
-	}
+    }
 
-	function mouseMoveListener(evt) {
-		var posX;
+    function mouseMoveListener(evt) {
+        var posX;
         var posY;
         var minX = 40;
         var maxX = theCanvas.width - 40;
         var minY = 40;
         var maxY = theCanvas.height - 40;
-		
-		//getting mouse position correctly 
-		var bRect = theCanvas.getBoundingClientRect();
-		mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
-		mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
-		
-		//clamp x and y positions to prevent object from dragging outside of canvas
-		posX = mouseX - dragHoldX;
-		posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
-		posY = mouseY - dragHoldY;
-		posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
-		
-		targetX = posX;
+
+        //getting mouse position correctly 
+        var bRect = theCanvas.getBoundingClientRect();
+        mouseX = (evt.clientX - bRect.left) * (theCanvas.width / bRect.width);
+        mouseY = (evt.clientY - bRect.top) * (theCanvas.height / bRect.height);
+
+        //clamp x and y positions to prevent object from dragging outside of canvas
+        posX = mouseX - dragHoldX;
+        posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
+        posY = mouseY - dragHoldY;
+        posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
+
+        targetX = posX;
         targetY = posY;
 
         posX = mouseX - cartDragHoldX;
@@ -450,9 +432,9 @@ function canvasApp() {
 
         cartTargetX = posX;
         cartTargetY = posY;
-	}
-		
-	function drawShapes() {
+    }
+
+    function drawShapes() {
         var i;
         var startIndex = curPage * numShapes;
         var max = Math.min(numShapes, shapes.length - startIndex);
@@ -466,10 +448,10 @@ function canvasApp() {
         if (dragging) {
             shapes[dragIndex].drawToContext(context);
         }
-	}
+    }
 
     function drawCart() {
-		var i;
+        var i;
         var max = Math.min(cartMaxItem, cart.length - cartStartIndex);
         for (i = 0; i < cartMaxItem; ++i) {
             if (cartStartIndex + i == cartDragIndex && cartDragging) {
@@ -482,37 +464,37 @@ function canvasApp() {
         if (cartDragging) {
             cart[cartDragIndex].drawToContext(context);
         }
-	}
-	
-	function drawTotal() {		
-	    context.font = "22px Comfortaa";
-        context.fillStyle = "#FFF";
-		context.fillText("Cart Total: " + totalPrice, 85, 330);
-		context.fillText("Max Budget: " + budget, 270, 330);
     }
-    
+
+    function drawTotal() {
+        context.font = "22px Comfortaa";
+        context.fillStyle = "#FFF";
+        context.fillText("Cart Total: " + totalPrice, 85, 330);
+        context.fillText("Max Budget: " + budget, 270, 330);
+    }
+
     function drawInfo() {
         context.fillStyle = "#000000";
         context.textAlign = "left";
-        context.drawImage(informationScreen, 0, 0);  
+        context.drawImage(informationScreen, 0, 0);
     }
 
-	function drawScreen() {
-		//bg
-		context.drawImage(img, 0, 0);
-		
+    function drawScreen() {
+        //bg
+        context.drawImage(img, 0, 0);
+
         btnGoHome.drawToContext(context);
         btnCartLeft.drawToContext(context);
         btnCartRight.drawToContext(context);
-		btnNext.drawToContext(context);
-		btnPrev.drawToContext(context);
+        btnNext.drawToContext(context);
+        btnPrev.drawToContext(context);
 
         if (cart != null) {
             drawCart();
         }
-		
-		drawTotal();
-		
+
+        drawTotal();
+
         drawShapes();
 
         btnInfo.drawToContext(context);
@@ -523,16 +505,15 @@ function canvasApp() {
             drawInfo();
         }
     }
-    
+
     function getShapes() {
-		var i;
-		var price;
-		if (shapes[dragIndex].foodData == null){
-			price = 20;
-		}
-		else{
-			price = shapes[dragIndex].foodData.Price;
-		}
+        var i;
+        var price;
+        if (shapes[dragIndex].foodData == null) {
+            price = 20;
+        } else {
+            price = shapes[dragIndex].foodData.Price;
+        }
         if (isInCart(mouseX, mouseY)) {
             if (budget >= totalPrice + price) {
                 var temp = new StoreItem(cart.length * 80, 370, 80, 80, shapes[dragIndex].foodData);
@@ -545,18 +526,16 @@ function canvasApp() {
                 totalPrice += price;
                 cart.push(temp);
                 cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
-            }
-            else {
+            } else {
                 popup.showMessage(context, "", POPUP_NO_BTN, 3750, drawScreen);
             }
-        }
-        else {
+        } else {
             currentPage = cartPageOrig;
             cartStartIndex = currentPage * numCartItems;
             cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
         }
 
-		AutoHideCartBtn();
+        AutoHideCartBtn();
     }
 
     function isInCart(x, y) {
@@ -567,8 +546,7 @@ function canvasApp() {
         var price;
         if (cart[cartDragIndex].foodData == null) {
             price = 20;
-        }
-        else {
+        } else {
             price = cart[cartDragIndex].foodData.Price;
         }
 
@@ -580,19 +558,18 @@ function canvasApp() {
         if (cartMaxItem == 0) {
             CartLeft();
         }
-        
+
         AutoHideCartBtn();
         clearInterval(timer);
         drawScreen();
     }
-	
+
     function GoHome() {
         if (isTouch) {
             theCanvas.removeEventListener("touchstart", touchStartEventListener, false);
             window.removeEventListener("touchend", touchEndEventListener, false);
             window.removeEventListener("touchmove", touchMoveEventListener, false);
-        }
-        else {
+        } else {
             theCanvas.removeEventListener("mousedown", mouseDownListener, false);
             window.removeEventListener("mouseup", mouseUpListener, false);
             window.removeEventListener("mousemove", mouseMoveListener, false);
@@ -602,10 +579,10 @@ function canvasApp() {
     }
 
     function CartLeft() {
-		if(currentPage > 0){
-			currentPage--;
-		}
-        
+        if (currentPage > 0) {
+            currentPage--;
+        }
+
         AutoHideCartBtn();
 
         cartStartIndex = currentPage * numCartItems;
@@ -616,17 +593,17 @@ function canvasApp() {
 
     function CartRight() {
         if (currentPage != Math.floor((cart.length - 1) / numCartItems)) {
-			currentPage++;
-		}
-        
+            currentPage++;
+        }
+
         AutoHideCartBtn();
 
         cartStartIndex = currentPage * numCartItems;
         cartMaxItem = Math.min(numCartItems, cart.length - cartStartIndex);
 
-		drawScreen();
+        drawScreen();
     }
-    
+
     function AutoHideCartBtn() {
         btnCartLeft.enabled = currentPage != 0;
         btnCartRight.enabled = cart.length != 0 && currentPage != Math.floor((cart.length - 1) / numCartItems);
@@ -647,24 +624,23 @@ function canvasApp() {
         AutoHideShopBtn();
         drawScreen();
     }
-    
+
     function AutoHideShopBtn() {
         btnPrev.enabled = curPage != 0;
         btnNext.enabled = curPage != Math.floor((shapes.length - 1) / numShapes);
     }
-    
-    function ToggleInfo(){
+
+    function ToggleInfo() {
         showInfo = !showInfo;
         if (!showInfo) {
             var INFO_BTN_WIDTH = 40;
             var INFO_BTN_HEIGHT = 40;
-            
+
             btnInfo.x = theCanvas.width - INFO_BTN_WIDTH;
             btnInfo.width = INFO_BTN_WIDTH;
             btnInfo.height = INFO_BTN_HEIGHT;
             btnInfo.message = "i";
-        }
-        else {
+        } else {
             btnInfo.x = 0;
             btnInfo.width = theCanvas.width;
             btnInfo.height = theCanvas.height;

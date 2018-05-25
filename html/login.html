@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" type="text/css"  href="../css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <script src="../javascript/bootstrap.js"></script>
-        <script src="../javascript/script.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 
-        <meta charset="UTF-8">
+    <script src="../javascript/bootstrap.js"></script>
+    <script src="../javascript/script.js"></script>
 
-        <title>Login or Sign Up</title>
+    <meta charset="UTF-8">
 
-    </head>
+    <title>Login or Sign Up</title>
+
+</head>
 
 
-    <body>
-        <div class = "container">
-            <header>
-                  <a href="index.html"><img class="img-fluid" src ="../images/temporary_header.png" alt = "header"></a>
-            </header>
-            <hr>
-                <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
-                <button onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Signup</button>
-            <hr>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html"><img class="img-fluid" src ="../images/temporary_header.png" alt = "header"></a>
+        </header>
+        <hr>
+        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+        <button onclick="document.getElementById('id02').style.display='block'" style="width:auto;">Signup</button>
+        <hr>
 
-            <div id="id01" class="modal">
+        <div id="id01" class="modal">
 
-                <form class="modal-content animate" action="../php/Login.php" method="POST">
+            <form class="modal-content animate" action="../php/Login.php" method="POST">
 
                 <label for="uname"><b>Username</b></label>
                 <input type="text" placeholder="Enter Username" name="uname" required>
@@ -42,40 +43,40 @@
                 <input type="checkbox" checked="checked" name="remember"> Remember me
                 </label>
 
-                    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-              </form>
+                <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+            </form>
         </div>
 
         <div id="id02" class="modal">
 
             <form class="modal-content animate" action="../php/Signup.php" method="POST">
 
-              <label for="uname"><b>Username</b></label>
-              <input type="text" placeholder="Enter Username" name="uname" required>
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
 
-              <label for="email"><b>Email</b></label>
-              <input type="text" placeholder="Enter Email" name="email" required>
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Enter Email" name="email" required>
 
-              <label for="psw"><b>Password</b></label>
-              <input type="password" placeholder="Enter Password" name="psw" required>
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
 
-              <label for="psw"><b>Confirm Password</b></label>
-              <input type="password" placeholder="Re-enter Password" name="repsw" required>
+                <label for="psw"><b>Confirm Password</b></label>
+                <input type="password" placeholder="Re-enter Password" name="repsw" required>
 
-              <button type="submit">Signup</button>
-              <label>
+                <button type="submit">Signup</button>
+                <label>
                 <input type="checkbox" checked="checked" name="remember"> Remember me
               </label>
 
-              <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
+                <button type="button" onclick="document.getElementById('id02').style.display='none'" class="cancelbtn">Cancel</button>
 
             </form>
         </div>
-             <footer>
-                <img class="img-fluid" src ="../images/temporary_footer.png" alt = "footer">
-            </footer>
-        </div>
-    </body>
+        <footer>
+            <img class="img-fluid" src="../images/temporary_footer.png" alt="footer">
+        </footer>
+    </div>
+</body>
 
 
 

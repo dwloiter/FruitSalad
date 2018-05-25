@@ -3,7 +3,7 @@ session_start();
 $dbservername = "localhost";
 $dbusername = "id5623156_fruit";
 $dbpassword = "salad";
-$dbname = "id5623156_login";
+$dbname = "id5623156_login"; 
 
 
 $score = $_POST["score"];

@@ -3,7 +3,7 @@ session_start();
 // remove all session variables
 session_unset();
 
-// destroy the session
+// destroy the session 
 session_destroy();
 
 header("Location: ../html/login.html");

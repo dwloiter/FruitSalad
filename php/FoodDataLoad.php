@@ -2,7 +2,7 @@
 
 class FoodData
 {
-    public $Name;
+    public $Name; 
     public $Price;
     public $Hunger;
     public $Meat;

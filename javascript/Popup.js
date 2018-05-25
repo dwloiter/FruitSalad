@@ -1,4 +1,3 @@
-
 var POPUP_MARGIN_X = 10;
 var POPUP_MARGIN_Y = 10;
 var POPUP_TEXT_DIFF_Y = 10;
@@ -29,14 +28,13 @@ function Popup(width, height, bgImage) {
 }
 
 
-Popup.prototype.showMessage = function (theContext, message, showButton, duration, callback)
-{
+Popup.prototype.showMessage = function (theContext, message, showButton, duration, callback) {
     var size = theContext.measureText(message);
     this.width = size.width + POPUP_MARGIN_X;
     if (message == "") {
         this.width = 450;
         this.height = 500;
-        }
+    }
     this.x = (theContext.canvas.width - this.width) / 2;
     this.y = (theContext.canvas.height - this.height) / 2;
     this.btn.x = (theContext.canvas.width - this.btn.width) / 2;
@@ -46,10 +44,11 @@ Popup.prototype.showMessage = function (theContext, message, showButton, duratio
     this.message = message;
     this.callback = callback;
 
-    if (showButton == POPUP_NO_BTN)
-    {
+    if (showButton == POPUP_NO_BTN) {
         var t = this;
-        PopupTimer = setInterval(function () { t.close(); }, duration);
+        PopupTimer = setInterval(function () {
+            t.close();
+        }, duration);
     }
 
     this.isShow = true;
@@ -97,22 +96,17 @@ Popup.prototype.close = function () {
 
 // draw button
 Popup.prototype.drawToContext = function (theContext) {
-    if (!this.isShow)
-    {
+    if (!this.isShow) {
         return;
     }
 
-    if (this.showButton == POPUP_BTN_OK)
-    {
+    if (this.showButton == POPUP_BTN_OK) {
         this.height = this.origHeight + this.btn.height + 10;
     }
 
-    if (this.bgImage != null)
-    {
+    if (this.bgImage != null) {
         theContext.drawImage(this.bgImage, this.x, this.y, this.width, this.height);
-    }
-    else
-    {
+    } else {
         theContext.fillStyle = this.bgcolor;
         theContext.fillRect(this.x, this.y, this.width, this.height);
     }
@@ -120,8 +114,7 @@ Popup.prototype.drawToContext = function (theContext) {
     theContext.textAlign = "center";
     theContext.fillText(this.message, this.x + this.width / 2, this.y + POPUP_TEXT_DIFF_Y);
 
-    if (this.showButton == POPUP_BTN_OK)
-    {
+    if (this.showButton == POPUP_BTN_OK) {
         this.btn.x = this.x + (this.width - this.btn.width) / 2;
         this.btn.y = this.y + this.height - this.btn.height - 5;
         this.btn.drawToContext(theContext);

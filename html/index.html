@@ -3,81 +3,81 @@
 
 <html>
 
-    <head>
-        <link rel="stylesheet" href="../css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
-        <script src="../javascript/bootstrap.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <script src="../javascript/script.js" defer></script>
-		
-		<audio id="myAudio">
+<head>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="../javascript/bootstrap.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../javascript/script.js" defer></script>
+
+    <audio id="myAudio">
 		<source src="../sound/hover.ogg" type="audio/ogg">
 		</audio>
 
-        <script src="../javascript/draggable.js"></script>
-        <script src="../javascript/StoreItem.js"></script>
-        <script src="../javascript/progressbar.js"></script>
-        <script src="../javascript/button.js"></script>
-        <script src="../javascript/home.js"></script>
-        <script src="../javascript/Popup.js"></script>
+    <script src="../javascript/draggable.js"></script>
+    <script src="../javascript/StoreItem.js"></script>
+    <script src="../javascript/progressbar.js"></script>
+    <script src="../javascript/button.js"></script>
+    <script src="../javascript/home.js"></script>
+    <script src="../javascript/Popup.js"></script>
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Main Game</title>
-
-
-    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Main Game</title>
 
 
-    <body>
-        <div style="font-family: Comfortaa;"></div>
-        <div class="container">
-            <header>
-                <a href="extras.html"><img class="img-fluid" src ="../images/extras_button.png" alt = "header"></a>
-                <a href="index.html"><img class="img-fluid" src ="../images/temporary_header.png" alt = "header"></a>
-            </header>
+</head>
 
-              <nav class="navbar navbar-expand-lg navbar-light bg-light">
-              <a class="navbar-brand" href="#">Hi, <?php echo $name?></a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+<body>
+    <div style="font-family: Comfortaa;"></div>
+    <div class="container">
+        <header>
+            <a href="extras.html"><img class="img-fluid" src ="../images/extras_button.png" alt = "header"></a>
+            <a href="index.html"><img class="img-fluid" src ="../images/temporary_header.png" alt = "header"></a>
+        </header>
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Hi, <?php echo $name?></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                  <li class="nav-item active">
-                    <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="about.html">About the Game</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="leaderboard.html">Leaderboard</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="map.html">Contact Us</a>
-                  </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About the Game</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="map.html">Contact Us</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                  <li class="nav-item">
-                    <a href="../php/logout.php"><button type="button">Log Out</button></a>
-                  </li>
+                    <li class="nav-item">
+                        <a href="../php/logout.php"><button type="button">Log Out</button></a>
+                    </li>
                 </ul>
-              </div>
-            </nav>
+            </div>
+        </nav>
 
-            <body>
+        <body>
 
-                <div class = "container text-center">
-                    <canvas id ="gameCanvas" width="450" height="500"></canvas>
-                </div>
+            <div class="container text-center">
+                <canvas id="gameCanvas" width="450" height="500"></canvas>
+            </div>
 
-            </body>
+        </body>
 
-            <footer>
-                <img class="img-fluid" src ="../images/temporary_footer.png" alt = "footer">
-            </footer>
-        </div>
-    </body>
+        <footer>
+            <img class="img-fluid" src="../images/temporary_footer.png" alt="footer">
+        </footer>
+    </div>
+</body>
 
 
 </html>

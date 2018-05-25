@@ -1,5 +1,5 @@
 // Simple class example
-var fruit_apple = new Image();  
+var fruit_apple = new Image();
 fruit_apple.src = '../images/Food/apple.png';
 var diffX = 10;
 
@@ -22,8 +22,7 @@ function StoreItem(posX, posY, width, height, foodData) {
         this.grain = foodData.Grain;
         this.vegetable = foodData.Vegetable;
         this.name = foodData.Name;
-    }
-    else {
+    } else {
         this.hunger = 25;
 
         switch (Math.floor(Math.random() * 3)) {
@@ -68,14 +67,14 @@ function StoreItem(posX, posY, width, height, foodData) {
     this.vegetableProgressBar.vcolor = "#50c878";
 }
 
-StoreItem.prototype.refreshProgressBar = function() {
+StoreItem.prototype.refreshProgressBar = function () {
     this.hungerProgressBar.current = this.hunger;
     this.meatProgressBar.current = this.meat;
     this.grainProgressBar.current = this.grain;
     this.vegetableProgressBar.current = this.vegetable;
 }
 
-StoreItem.prototype.setX = function(x) {
+StoreItem.prototype.setX = function (x) {
     var diff = x - this.x;
     this.x = x;
     this.origX = x;
@@ -109,8 +108,7 @@ StoreItem.prototype.drawToContext = function (theContext) {
 
     if (this.name == null) {
         theContext.drawImage(fruit_apple, this.x, this.y, this.width, this.height);
-    }
-    else {
+    } else {
         theContext.drawImage(foodImages.get(this.name), this.x, this.y, this.width, this.height);
     }
 }

@@ -3,67 +3,65 @@
 
 <html>
 
-    <head>
-        <link rel="stylesheet" href="../css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../css/style.css">
-        <script src="../javascript/bootstrap.js"></script>
-        <script src="../javascript/script.js" defer></script>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="../javascript/bootstrap.js"></script>
+    <script src="../javascript/script.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>About the Game</title>
-    </head>
+    <title>About the Game</title>
+</head>
 
 
-    <body>
-        <div class="container">
-            <header>
-                <a href="extras.html"><img class="img-fluid" src ="../images/extras_button.png" alt = "header"></a>
-                <a href="index.html"><img class="img-fluid" src ="../images/temporary_header.png" alt = "header"></a>
-            </header>
+<body>
+    <div class="container">
+        <header>
+            <a href="extras.html"><img class="img-fluid" src ="../images/extras_button.png" alt = "header"></a>
+            <a href="index.html"><img class="img-fluid" src ="../images/temporary_header.png" alt = "header"></a>
+        </header>
 
-              <nav class="navbar navbar-expand-lg navbar-light bg-light">
-              <a class="navbar-brand" href="#">Hi, <?php echo $name?></a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Hi, <?php echo $name?></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                  </li>
-                  <li class="nav-item active">
-                    <a class="nav-link" href="about.html">About the Game<span class="sr-only">(current)</span></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="leaderboard.html">Leaderboard</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="map.html">Contact Us</a>
-                  </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="about.html">About the Game<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="map.html">Contact Us</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                  <li class="nav-item">
-                    <a href="../php/logout.php"><button type="button">Log Out</button></a>
-                  </li>
+                    <li class="nav-item">
+                        <a href="../php/logout.php"><button type="button">Log Out</button></a>
+                    </li>
                 </ul>
-              </div>
-            </nav>
-            <div> 
-              <h2>About the Game</h2>
-              <p>The goal of this game is to take the money you are given and to buy food for one week.
-                After purchasing food, you return home and you ration your food so that you get
-                the most nutrition while not wasting any food. You are awarded points for how much the nutrition (red, yellow, and green) bars are filled. Food that is not eaten or that expires will deduct from your final score.
-              </p>
             </div>
-
-
-
-            <footer>
-                <img class="img-fluid" src ="../images/temporary_footer.png" alt = "footer">
-            </footer>
+        </nav>
+        <div>
+            <h2>About the Game</h2>
+            <p>The goal of this game is to take the money you are given and to buy food for one week. After purchasing food, you return home and you ration your food so that you get the most nutrition while not wasting any food. You are awarded points for how much the nutrition (red, yellow, and green) bars are filled. Food that is not eaten or that expires will deduct from your final score.
+            </p>
         </div>
-    </body>
+
+
+
+        <footer>
+            <img class="img-fluid" src="../images/temporary_footer.png" alt="footer">
+        </footer>
+    </div>
+</body>
 
 
 </html>

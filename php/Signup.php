@@ -6,7 +6,7 @@ $username = $_POST["uname"];
 $password = md5($_POST["psw"]);
 $email = $_POST["email"];
 
-$dbservername = "localhost";
+$dbservername = "localhost"; 
 $dbusername = "id5623156_fruit";
 $dbpassword = "salad";
 $dbname = "id5623156_login";

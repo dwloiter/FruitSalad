@@ -5,7 +5,7 @@ $dbservername = "localhost";
 $dbusername = "id5623156_fruit";
 $dbpassword = "salad";
 $dbname = "id5623156_login";
-$place = 1;
+$place = 1; 
 
 // Create connection
 $conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
