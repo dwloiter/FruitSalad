@@ -49,7 +49,7 @@ function home(cart) {
 
 	init();
 
-  var currentDay;
+    var currentDay;
 
 	var dragIndex;
 	var dragging;
