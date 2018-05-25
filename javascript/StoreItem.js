@@ -16,7 +16,7 @@ function StoreItem(posX, posY, width, height, foodData) {
 
     // temp data. max is 100
     if (foodData != null) {
-        this.foodData = foodData;
+        this.foodData = Object.assign({}, foodData);
         this.hunger = foodData.Hunger;
         this.meat = foodData.Meat;
         this.grain = foodData.Grain;
